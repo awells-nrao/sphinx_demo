@@ -1,0 +1,148 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>General Workflow for Conversion &mdash; CASA Guides demo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=39aa56ad" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="First Look at Imaging" href="first_look_at_imaging.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            CASA Guides demo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">ALMA Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="first_look_at_imaging.html">First Look at Imaging</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">CASA Guides demo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">General Workflow for Conversion</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="general-workflow-for-conversion">
+<h1>General Workflow for Conversion<a class="headerlink" href="#general-workflow-for-conversion" title="Permalink to this heading"></a></h1>
+<ul>
+<li><p>Create a GitHub repository for Sphinx document-building. Ideally, this will become a part of the CASA Docs readthedocs repository.</p></li>
+<li><p>Convert MediaWiki guides to IPython notebooks (.ipynb) with the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span><span class="s1">&#39;https://casaguides.nrao.edu/index.php?title=First_Look_at_Imaging_CASA_6.6.1&amp;action=raw&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>pandoc<span class="w"> </span>--from<span class="o">=</span>mediawiki<span class="w"> </span>--to<span class="o">=</span>gfm<span class="w"> </span>-o<span class="w"> </span>First_Look_at_Imaging.md<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>jupytext<span class="w"> </span>--to<span class="w"> </span>notebook<span class="w"> </span>First_Look_at_Imaging.md
+</pre></div>
+</div>
+</li>
+<li><p>Add the resulting <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> to the <code class="docutils literal notranslate"><span class="pre">/docs</span></code> directory of the repository.</p></li>
+<li><p>Download photos from the old guides and add to <code class="docutils literal notranslate"><span class="pre">/images</span></code>.</p></li>
+<li><p>Update image links and self-referencing wiki links, such as <cite>[[Extracting_scripts_from_these_tutorials]]</cite> and <cite>{{plotms_6.6.1}}</cite>, within the <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code>.</p></li>
+<li><p>Publish the <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> to HTML with Sphinx using the command <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code>.</p>
+<ul class="simple">
+<li><p>We use <code class="docutils literal notranslate"><span class="pre">nbsphinx_execute</span> <span class="pre">=</span> <span class="pre">'never'</span></code> in <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> so that code cells may remain as code in the <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> without being executed.</p></li>
+<li><p>We can also run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span> <span class="pre">SPHINXOPTS=&quot;&quot;</span></code> with <code class="docutils literal notranslate"><span class="pre">nbsphinx_allow_errors</span> <span class="pre">=</span> <span class="pre">True</span></code> in <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> to let the build complete despite any errors.</p></li>
+</ul>
+</li>
+</ul>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">ALMA Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="first_look_at_imaging.html">First Look at Imaging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#About-this-Guide">About this Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Getting-CASA">Getting CASA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#About-the-Sample-Data:-Continuum-and-N2H+-in-TW-Hydra">About the Sample Data: Continuum and N2H+ in TW Hydra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Getting-the-Data">Getting the Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Starting-CASA">Starting CASA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Some-CASA-basics">Some CASA basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Using-tasks,-and-getting-oriented-with-the-data">Using tasks, and getting oriented with the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Inspecting-the-data">Inspecting the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#First-Look-at-TCLEAN">First Look at TCLEAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Experiment-with-TCLEAN">Experiment with TCLEAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#ASIDE:-See-the-effects-of-calibration-and-flagging">ASIDE: See the effects of calibration and flagging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Image-the-science-target">Image the science target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Non-interactive-clean">Non-interactive clean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_look_at_imaging.html#Primary-beam-correction">Primary beam correction</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="first_look_at_imaging.html" class="btn btn-neutral float-right" title="First Look at Imaging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NRAO 2025 built from OpenAstronomy template.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

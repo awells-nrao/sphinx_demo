@@ -1,0 +1,833 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>First Look at Imaging &mdash; CASA Guides demo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=39aa56ad" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="General Workflow for Conversion" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CASA Guides demo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">ALMA Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">First Look at Imaging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#About-this-Guide">About this Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Getting-CASA">Getting CASA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#About-the-Sample-Data:-Continuum-and-N2H+-in-TW-Hydra">About the Sample Data: Continuum and N2H+ in TW Hydra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Getting-the-Data">Getting the Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Starting-CASA">Starting CASA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Some-CASA-basics">Some CASA basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Using-tasks,-and-getting-oriented-with-the-data">Using tasks, and getting oriented with the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Inspecting-the-data">Inspecting the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#First-Look-at-TCLEAN">First Look at TCLEAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Experiment-with-TCLEAN">Experiment with TCLEAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ASIDE:-See-the-effects-of-calibration-and-flagging">ASIDE: See the effects of calibration and flagging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Image-the-science-target">Image the science target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Non-interactive-clean">Non-interactive clean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Primary-beam-correction">Primary beam correction</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CASA Guides demo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">First Look at Imaging</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/first_look_at_imaging.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="First-Look-at-Imaging">
+<h1>First Look at Imaging<a class="headerlink" href="#First-Look-at-Imaging" title="Permalink to this heading"></a></h1>
+<section id="About-this-Guide">
+<h2>About this Guide<a class="headerlink" href="#About-this-Guide" title="Permalink to this heading"></a></h2>
+<p>This guide features <a class="reference external" href="https://cartavis.org/">CARTA</a>, the “Cube Analysis and Rendering Tool for Astronomy,” which is the new NRAO visualization tool for images and cubes. The CASA viewer (<a class="reference external" href="https://casadocs.readthedocs.io/en/v6.6.1/api/tt/casaviewer.imview.html">imview</a>) has not been maintained for a few years and will be removed from future versions of CASA. We strongly recommend using CARTA, as it provides a much more efficient, stable, and feature rich user experience. A comparison of the
+CASA viewer and CARTA, as well as instructions on how to use CARTA at NRAO, is provided in the <a class="reference external" href="https://casadocs.readthedocs.io/en/v6.6.1/notebooks/carta.html">CARTA section of the CASA docs</a>.</p>
+<p>The purpose of this tutorial is to provide a first look at imaging ALMA data for those new to CASA.</p>
+<p>Data delivered by ALMA is pre-calibrated either by ARC staff or by the ALMA calibration pipeline. The delivered data is ready for imaging. This tutorial demonstrates the basic procedures that will help you complete the imaging steps.</p>
+<p>This guide covers the same material used in hands-on training sessions at <a class="reference external" href="https://science.nrao.edu/facilities/alma/naasc-workshops/facilities/alma/community">NRAO Community Days events</a> and ALMA Data Reduction tutorials presented by NAASC staff.</p>
+</section>
+<section id="Getting-CASA">
+<h2>Getting CASA<a class="headerlink" href="#Getting-CASA" title="Permalink to this heading"></a></h2>
+<p>If you do not already have CASA installed on your machine, you will have to download and install it.</p>
+<p>Download and installation instructions are available here:</p>
+<p><a class="reference external" href="http://casa.nrao.edu/casa_obtaining.shtml">http://casa.nrao.edu/casa_obtaining.shtml</a></p>
+</section>
+<section id="About-the-Sample-Data:-Continuum-and-N2H+-in-TW-Hydra">
+<h2>About the Sample Data: Continuum and N2H+ in TW Hydra<a class="headerlink" href="#About-the-Sample-Data:-Continuum-and-N2H+-in-TW-Hydra" title="Permalink to this heading"></a></h2>
+<p>The data for this example comes from ALMA Project 2011.0.00340.S, “Searching for H2D+ in the disk of TW Hya v1.5”, for which the PI is Chunhua Qi. Part of the data for this project has been published in [<a class="reference external" href="http://adsabs.harvard.edu/abs/2013Sci...341..630Q">http://adsabs.harvard.edu/abs/2013Sci…341..630Q</a> Qi et al. 2013].</p>
+<p>The original observation had three scientific objectives:</p>
+<ol class="arabic simple">
+<li><p>Image the submm continuum structure in TW Hydra</p></li>
+<li><p>Image the H2D+ line structure (rest frequency 372.42138 GHz)</p></li>
+<li><p>Image the N2H+ line structure (rest frequency 372.67249 GHz)</p></li>
+</ol>
+<p>The data used in our tutorial has already been calibrated. Furthermore, to make the data set more manageable, we have reduced it in size by averaging in time and frequency. Our goal will be to image the continuum emission and the N2H+ spectral line, which is bright and well suited for demonstrating the imaging techniques.</p>
+<p>The spectral window we will image covers 234.375 MHz in bandwidth, and contains 384 channels spaced by 610 kHz. The data includes observations from 19 of the ALMA 12-m main array antennas, observed during Early Science Cycle 0.</p>
+</section>
+<section id="Getting-the-Data">
+<h2>Getting the Data<a class="headerlink" href="#Getting-the-Data" title="Permalink to this heading"></a></h2>
+<p>The data used in this tutorial is part of a larger data package used for NRAO calibration and imaging tutorials. If you plan on working through all of the “First Look” tutorials for CASA beginners, it is worth downloading the entire package now. If you plan on working through just this imaging tutorial then you can download a smaller data package (see below).</p>
+<p>The complete package (1.8G tarred and zipped, 2.6G unpacked) is available here:</p>
+<p><a class="reference external" href="https://bulk.cv.nrao.edu/almadata/public/casaguides/FirstLook_TWHya_Band7_6.6.1/">https://bulk.cv.nrao.edu/almadata/public/casaguides/FirstLook_TWHya_Band7_6.6.1/</a></p>
+<p>You can then unpack the data as follows:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-bash notranslate"><div class="highlight"><pre><span></span>%%bash
+<span class="c1"># In bash</span>
+tar<span class="w"> </span>-xvzf<span class="w"> </span>twhya_firstlook.tgz
+</pre></div>
+</div>
+</div>
+<p>For the imaging tutorial, we are interested in the data that have been flagged and calibrated. The relevant data set is called “twhya_calibrated.ms”. You should copy this data set into a new working directory, and you will start CASA from that directory. (If you want to run the script created using extractCASAscript.py, found in the <a class="reference external" href="https://casaguides.nrao.edu/index.php/Extracting_scripts_from_these_tutorials">Extracting scripts from these tutorials guide</a>, you will want to place the
+extracted script in your MyTutorial directory.)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-bash notranslate"><div class="highlight"><pre><span></span>%%bash
+<span class="c1"># In bash</span>
+<span class="nb">cd</span><span class="w"> </span>working
+tar<span class="w"> </span>-xvf<span class="w"> </span>twhya_calibrated.ms.tar
+<span class="nb">cd</span><span class="w"> </span>..
+mkdir<span class="w"> </span>MyTutorial
+<span class="nb">cd</span><span class="w"> </span>MyTutorial
+cp<span class="w"> </span>-r<span class="w"> </span>../working/twhya_calibrated.ms<span class="w"> </span>.
+</pre></div>
+</div>
+</div>
+<p>Alternatively, if you do not want to download the full 1.8G data package, you can download just the smaller data file (416M tarred, 1G unpacked) needed specifically for this tutorial as follows:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-bash notranslate"><div class="highlight"><pre><span></span>%%bash
+<span class="c1"># In bash</span>
+mkdir<span class="w"> </span>MyTutorial
+<span class="nb">cd</span><span class="w"> </span>MyTutorial
+wget<span class="w"> </span>-r<span class="w"> </span>-np<span class="w"> </span>-nH<span class="w"> </span>--cut-dirs<span class="o">=</span><span class="m">4</span><span class="w"> </span>--reject<span class="w"> </span><span class="s2">&quot;index.html*&quot;</span><span class="w"> </span>https://bulk.cv.nrao.edu/almadata/public/casaguides/FirstLook_TWHya_Band7_6.6.1/twhya_calibrated.ms.tar
+</pre></div>
+</div>
+</div>
+<p>Or you can download the file via your browser at the following link: <a class="reference external" href="https://bulk.cv.nrao.edu/almadata/public/casaguides/FirstLook_TWHya_Band7_6.6.1/twhya_calibrated.ms.tar">https://bulk.cv.nrao.edu/almadata/public/casaguides/FirstLook_TWHya_Band7_6.6.1/twhya_calibrated.ms.tar</a></p>
+</section>
+<section id="Starting-CASA">
+<h2>Starting CASA<a class="headerlink" href="#Starting-CASA" title="Permalink to this heading"></a></h2>
+<p>At this point you should be working in a unix shell from the directory that contains the data. An “ls” command should show you the data file “twhya_calibrated.ms” in the current working directory.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-bash notranslate"><div class="highlight"><pre><span></span>%%bash
+<span class="c1"># In bash</span>
+ls
+</pre></div>
+</div>
+</div>
+<p>And now you can start CASA:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-bash notranslate"><div class="highlight"><pre><span></span>%%bash
+<span class="c1"># In bash</span>
+casa
+</pre></div>
+</div>
+</div>
+<p>You will notice that CASA opens a message window, for feedback from CASA tasks. The CASA prompt is presented in the terminal window. CASA is running on a python interpreter, so python syntax is valid here. (NOTE: If you are working on NRAO machines, call casa-alma instead of simply casa to get the current version being used for ALMA data.)</p>
+<p>When you are finished working with your data, you can end your CASA session by typing “exit” at the command prompt.</p>
+</section>
+<section id="Some-CASA-basics">
+<h2>Some CASA basics<a class="headerlink" href="#Some-CASA-basics" title="Permalink to this heading"></a></h2>
+<p>A complete description of CASA is available in the <a class="reference external" href="https://casadocs.readthedocs.io/en/v6.6.1/">documentation</a>. Here we will touch on a couple of useful concepts to get us started.</p>
+<p>A few unix commands work directly in CASA, for example you can try the “ls” command and the “pwd” command:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">ls</span>
+<span class="n">pwd</span>
+</pre></div>
+</div>
+</div>
+<p>You can access all operating system commands as follows:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>It is often convenient to store CASA instructions in a python script. If you have such a script, it can be executed using the following syntax:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="c1"># if you are running this as an extracted script, comment this line out</span>
+<span class="n">execfile</span><span class="p">(</span><span class="s1">&#39;my_script.py&#39;</span><span class="p">,</span><span class="nb">globals</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Using-tasks,-and-getting-oriented-with-the-data">
+<h2>Using tasks, and getting oriented with the data<a class="headerlink" href="#Using-tasks,-and-getting-oriented-with-the-data" title="Permalink to this heading"></a></h2>
+<p>The first step in all data reduction with CASA is to examine the header information and data structure for the data set using the task. In CASA, there are two ways to execute tasks. You can either set the parameters one-by-one and then instruct CASA to “go” when you’re ready, or you can execute the task with a single command. For example, here is how you can use the first method:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">inp</span> <span class="n">listobs</span>
+<span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span>
+<span class="n">go</span>
+</pre></div>
+</div>
+</div>
+<p>And here is an example of running the task with a single call from the command line:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">listobs</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>This single call is the preferred method, as it works in scripts. The output for is printed to the CASA Message window. If you would like to save the output to a text file as well, you can give a file name to save to:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">listobs</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span><span class="p">,</span><span class="n">listfile</span><span class="o">=</span><span class="s1">&#39;twhya_listobs.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Note that you can get help on any CASA task:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">help</span> <span class="n">listobs</span>
+</pre></div>
+</div>
+</div>
+<p>You can exit the help menu at any time by typing the letter “q”.</p>
+<p>The listobs output for our data set is as follows:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>================================================================================
+                   MeasurementSet Name:  /path/to/my/directory/MyTutorial/twhya_calibrated.ms      MS Version 2
+================================================================================
+   Observer: cqi     Project: uid://A002/X327408/X6f
+Observation: ALMA
+Data records: 68335       Total elapsed time = 5647.68 seconds
+           Observed from   19-Nov-2012/07:36:57.0   to   19-Nov-2012/09:11:04.7 (UTC)
+
+   ObservationID = 0         ArrayID = 0
+  Date        Timerange (UTC)          Scan  FldId FieldName             nRows     SpwIds   Average Interval(s)    ScanIntent
+  19-Nov-2012/07:36:57.0 - 07:39:13.1     4      0 J0522-364                 3420  [0]  [6.05] [CALIBRATE_BANDPASS#ON_SOURCE,CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              07:44:45.2 - 07:47:01.2     7      2 Ceres                     3420  [0]  [6.05] [CALIBRATE_AMPLI#ON_SOURCE,CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              07:52:42.0 - 07:53:47.6    10      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              07:56:23.5 - 08:02:11.3    12      5 TW Hya                    7616  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]
+              08:04:36.3 - 08:05:41.9    14      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              08:08:09.6 - 08:13:57.3    16      5 TW Hya                    8442  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]
+              08:16:20.6 - 08:17:26.2    18      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              08:19:53.9 - 08:25:41.7    20      5 TW Hya                    8389  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]
+              08:28:17.1 - 08:29:22.6    22      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              08:32:00.5 - 08:37:48.2    24      5 TW Hya                    8409  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]
+              08:40:11.9 - 08:41:17.4    26      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              08:43:45.6 - 08:49:33.4    28      5 TW Hya                    8514  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]
+              08:51:57.1 - 08:53:02.6    30      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              08:58:12.0 - 09:00:28.1    33      6 3c279                     3043  [0]  [6.05] [CALIBRATE_BANDPASS#ON_SOURCE,CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              09:01:35.7 - 09:02:41.2    34      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+              09:05:15.6 - 09:07:31.6    36      5 TW Hya                    3402  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]
+              09:09:59.1 - 09:11:04.7    38      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]
+           (nRows = Total number of rows per scan)
+Fields: 5
+  ID   Code Name                RA               Decl           Epoch   SrcId      nRows
+  0    none J0522-364           05:22:57.984648 -36.27.30.85128 J2000   0           3420
+  2    none Ceres               06:10:15.950590 +23.22.06.90668 J2000   2           3420
+  3    none J1037-295           10:37:16.079736 -29.34.02.81316 J2000   3          13680
+  5    none TW Hya              11:01:51.796000 -34.42.17.36600 J2000   4          44772
+  6    none 3c279               12:56:11.166576 -05.47.21.52464 J2000   5           3043
+Spectral Windows:  (1 unique spectral windows and 1 unique polarization setups)
+  SpwID  Name                           #Chans   Frame   Ch0(MHz)  ChanWid(kHz)  TotBW(kHz) CtrFreq(MHz) BBC Num  Corrs
+  0      ALMA_RB_07#BB_2#SW-01#FULL_RES    384   TOPO  372533.086       610.352    234375.0 372649.9688        2  XX  YY
+Sources: 5
+  ID   Name                SpwId RestFreq(MHz)  SysVel(km/s)
+  0    J0522-364           0     -              -
+  1    Ceres               0     -              -
+  2    J1037-295           0     -              -
+  3    TW Hya              0     -              -
+  4    3c279               0     -              -
+Antennas: 19:
+  ID   Name  Station   Diam.    Long.         Lat.                Offset from array center (m)                ITRF Geocentric coordinates (m)
+                                                                     East         North     Elevation               x               y               z
+  1    DA42  A050      12.0 m   -067.45.16.2  -22.53.29.3         43.0352     -744.9713       21.6702  2225079.880016 -5440041.377534 -2481724.598031
+  2    DA44  A068      12.0 m   -067.45.20.6  -22.53.25.7        -82.4232     -631.7828       23.5810  2224981.097784 -5440131.250387 -2481621.066374
+  3    DA45  A070      12.0 m   -067.45.11.9  -22.53.29.3        166.1833     -743.4934       19.8811  2225193.450167 -5439993.764157 -2481722.540534
+  4    DA46  A067      12.0 m   -067.45.12.7  -22.53.27.2        142.4097     -678.7318       20.1280  2225181.070532 -5440026.290790 -2481662.975103
+  5    DA48  A046      12.0 m   -067.45.17.0  -22.53.29.3         21.4267     -742.7987       21.6757  2225060.202580 -5440050.344436 -2481722.598651
+  6    DA49  A029      12.0 m   -067.45.18.2  -22.53.25.8        -12.9134     -636.4552       22.1350  2225044.239583 -5440102.022535 -2481624.808405
+  7    DA50  A045      12.0 m   -067.45.17.9  -22.53.30.1         -5.4183     -767.4398       22.6034  2225032.051652 -5440052.426015 -2481745.660003
+  9    DV02  A077      12.0 m   -067.45.10.1  -22.53.25.9        217.6299     -637.5333       15.8376  2225255.259272 -5440008.987869 -2481623.352052
+  11   DV05  A082      12.0 m   -067.45.08.3  -22.53.29.2        269.0433     -740.9521       15.7832  2225287.593766 -5439952.243679 -2481718.605314
+  12   DV06  A037      12.0 m   -067.45.17.5  -22.53.28.8          6.7403     -727.3003       21.2086  2225048.729287 -5440061.085777 -2481708.139136
+  14   DV08  A021      12.0 m   -067.45.17.2  -22.53.27.0         14.3196     -672.8108       21.3420  2225063.814715 -5440077.948261 -2481657.992572
+  15   DV10  A071      12.0 m   -067.45.19.9  -22.53.23.5        -60.7887     -563.2541       23.3799  2225011.141945 -5440147.560932 -2481557.855663
+  16   DV13  A072      12.0 m   -067.45.12.6  -22.53.24.0        147.1742     -580.5887       18.1825  2225199.254375 -5440058.161494 -2481571.803699
+  17   DV15  A074      12.0 m   -067.45.12.1  -22.53.32.0        161.8159     -828.6196       18.7688  2225176.483514 -5439963.820451 -2481800.529842
+  18   DV16  A069      12.0 m   -067.45.21.3  -22.53.30.2       -101.4797     -770.1047       23.2972  2224942.993176 -5440088.421459 -2481748.384855
+  19   DV17  A138      12.0 m   -067.45.17.1  -22.53.34.4         19.1461     -901.2603       26.0137  2225036.269025 -5439997.853009 -2481870.267607
+  20   DV18  A053      12.0 m   -067.45.17.3  -22.53.31.2         12.5939     -802.9941       21.5281  2225043.111690 -5440031.889497 -2481777.995870
+  24   DV22  A011      12.0 m   -067.45.14.4  -22.53.28.4         95.9131     -716.5005       21.0898  2225132.810230 -5440031.115405 -2481698.143589
+  25   DV23  A007      12.0 m   -067.45.15.1  -22.53.27.3         74.0152     -681.2926       21.3231  2225117.809276 -5440052.280005 -2481665.799049
+</pre></div>
+</div>
+</section>
+<section id="Inspecting-the-data">
+<h2>Inspecting the data<a class="headerlink" href="#Inspecting-the-data" title="Permalink to this heading"></a></h2>
+<p>The <a class="reference external" href="https://casadocs.readthedocs.io/en/v6.6.1/api/tt/casaplotms.plotms.html">plotms</a> task is an important and versatile tool that allows the user to look at the UV data in a graphical manner. Let’s start by plotting the UV coverage for our data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">plotms</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span><span class="p">,</span> <span class="n">xaxis</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">avgchannel</span><span class="o">=</span><span class="s1">&#39;10000&#39;</span><span class="p">,</span> <span class="n">avgspw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">avgtime</span><span class="o">=</span><span class="s1">&#39;1e9&#39;</span><span class="p">,</span> <span class="n">avgscan</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">coloraxis</span><span class="o">=</span><span class="s1">&#39;field&#39;</span><span class="p">,</span> <span class="n">showgui</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<figure><p><img alt="78aac4cb37cc40389eab907a0fa7ce28" class="no-scaled-link" src="_images/Imaging-tutorial-uv-coverage_6.5.4.jpg" style="width: 500px;" /></p>
+<figcaption><p>Figure 1: UV coverage for the TW Hya data set.</p>
+</figcaption></figure><p>You should see a GUI as in Figure 1. The colors in the UV coverage plot identify different observing targets. Here we use arbitrarily large values for channels to average over as well as time to average over, to be sure that the average is done over all the channels for the full time of the data set. You will see a warning about averaging over more channels than exist, but will simply average the channels that do exist.</p>
+<figure><p><img alt="ca52b6bd20df415db5ed8e8c6d281c22" class="no-scaled-link" src="_images/Imaging-tutorial-amp-uvdist-ceres_6.5.4.jpg" style="width: 500px;" /></p>
+<figcaption><p>Figure 2: Amplitude vs. UVdist for Ceres.</p>
+</figcaption></figure><p>At this point, you can experiment with the GUI. For example, it is often interesting and useful to examine the plot of amplitude vs. UV distance. Select the “Axes” tab, then set the X Axis to “UVDist” and the Data setting to “Amp”. Under the “Page” tab, set Iteration Axis to “Field”. Then click the Plot button.</p>
+<p>You can step through the different calibrators and science targets using the green arrow buttons at the bottom of the GUI. Notice that for some sources, including Ceres, we can see the amplitude change as a function of UV distance as in Figure 2. These sources are spatially resolved, and we will see this clearly in the imaging below.</p>
+</section>
+<section id="First-Look-at-TCLEAN">
+<h2>First Look at TCLEAN<a class="headerlink" href="#First-Look-at-TCLEAN" title="Permalink to this heading"></a></h2>
+<p>‘’Starting with CASA 4.7, the imaging capabilities of have been refactored and improved in a task called , which is called by the user in largely the same way as clean. In this guide, we will use solely tclean. In the guide <a class="reference external" href="TCLEAN_and_ALMA">TCLEAN and ALMA</a>, the differences in syntax between clean and tclean are made more explicit. For reference, legacy first look guides for older versions of CASA that use rather than for imaging are kept in <a class="reference external" href="Archived_ALMA_CASAguides">Archived ALMA
+CASAguides</a>. ‘’</p>
+<p>In this dataset, the phase calibrator is identified by field 3. Let’s image this calibrator, as a simple source for a first attempt at tclean. We’ll image it into an image file called “phase_cal”. First, in case you’ve run this task before, let’s remove old versions of the image that use this name. (The “.*” is needed because imaging produces several files with the same root name).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf phase_cal.*&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now we will use the task to do the imaging. Here is an explanation of how we set some of the parameters; see the documentation for a complete list of options.</p>
+<ul class="simple">
+<li><p>We will first image the phase calibrator, and set the image name to “phase_cal”. To identify the phase calibrator in a measurement set, look at the ‘ScanIntent’ column in the output of . The phase calibrator should have the intent “CALIBRATE_PHASE#ON_SOURCE”. In this MS, the phase calibrator is J1037-295, identified by field = “3”.</p></li>
+<li><p>We will use multifrequency synthesis (specmode = mfs) to make a single continuum image. Multifrequency synthesis combines data from all selected spectral channels into a single continuum image. If your observations cover a large frequency range, it is possible that the amplitude or structure of the source can change substantially with frequency. This is only a concern if the fractional bandwidth (delta_nu/nu_center) is greater than 10%. For this dataset it is not an issue. Therefore, we set
+deconvolver=hogbom, which uses nterms=1, telling tclean that each deconvolved component has a single amplitude at all frequencies.</p></li>
+<li><p>We will image a single pointing, so we set gridder=’standard’. If we had multiple, contiguous pointings– or if we were simultaneously imaging 7m and 12m array data (even if only a single pointing of each)— we would need to set gridder=’mosaic’.</p></li>
+<li><p>We set the cell size to 0.1 arcseconds, which places ~5 pixels across the synthesized beam. As a rule of thumb, we’d like ~5 pixels across the smallest direction of our elliptical beam. For a small dataset, you may be able to determine a good cell size with a quick imaging call, and note the beam calculated by tclean. For many ALMA projects, however, this could take a substantial amount of time! You can estimate what the cell size should be by looking again at the uv-coverage. Change the
+x-axis to uvwave, and the cell size is roughly 206265/(longest baseline in wavelengths)/(number of cells across the beam). For this MS, this works out to 0.09”, which we round up to 0.1”. As you will see, tclean reports a synthesized beam size of 0.51” x 0.42”, making this a decent choice.</p></li>
+<li><p>We choose the image size then based on the cell size. We want our image to cover the primary beam of a single antenna. For single fields with the 7m antennas, the primary beam in arcseconds is ~ 10608/nu_GHz, where nu_GHz is the central frequency expressed in GHz, and for single fields with the 12m antennas, the primary beam in arcseconds is ~ 6300/nu_GHz. The TW Hya data were taken with 12m antennas at a central frequency of 372.650 GHz, giving a primary beam of about 17”. (For point sources,
+full coverage of the primary beam becomes less important, especially for well-known calibrators, and so you might see in the weblogs for your data that calibrator images are a bit smaller than the primary beam estimate would suggest. This is to save disk space and processing time during pipeline runs!)</p></li>
+<li><p>Image sizes can be arbitrary but should be symmetrical. Good practice is probably to round up to the nearest 10 or 100 pixels and if tclean does not like your choice, it will recommend in the logger window a better choice. The size of the primary beam suggests an image size then of 17”/0.1 arcsec per cell = 170 cells. Note that with this image size, however, tclean will warn that there is a non-zero value at the edge of the primary beam. For well-known calibrators, this is likely not an issue,
+but we’ll increase the image size here just to demonstrate. At a size of 245 x 245, the non-zero value warning goes away, but now tclean suggests a more efficient image size of 250 rather than 245. Thus we will use an image size of 250x250 cells.</p></li>
+</ul>
+<p>The task will start in interactive mode, which allows you to manually control the threshold, major cycles, and masking. For users familiar with , note that in contrast with the clean task, leaving niter (the maximum number of iterations) unset defaults to niter=0, and is being told not to do any cleaning. If there are no clean components in the model – for instance if this is the first invocation of tclean on this field and spectral window for the given set of visibilities (MS) – then what
+will be created is the dirty cube or image. Here, we first run tclean with niter unset.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">tclean</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span><span class="p">,</span>
+       <span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;phase_cal&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span>
+       <span class="n">spw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+       <span class="n">specmode</span><span class="o">=</span><span class="s1">&#39;mfs&#39;</span><span class="p">,</span>
+       <span class="n">deconvolver</span><span class="o">=</span><span class="s1">&#39;hogbom&#39;</span><span class="p">,</span>
+       <span class="n">gridder</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+       <span class="n">imsize</span><span class="o">=</span><span class="p">[</span><span class="mi">250</span><span class="p">,</span><span class="mi">250</span><span class="p">],</span>
+       <span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.1arcsec&#39;</span><span class="p">],</span>
+       <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;briggs&#39;</span><span class="p">,</span>
+       <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;0.0mJy&#39;</span><span class="p">,</span>
+       <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>CASA is sure to tell you that you haven’t done any cleaning with the following warning:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>WARN task_tclean    Restoring with an empty model image. Only residuals will be processed to form the output restored image.
+</pre></div>
+</div>
+<p>Run the command again, this time with niter set to some (arbitrarily large) number:</p>
+<figure><p><img alt="ad0627a6140b468c9d874fbe182342d9" class="no-scaled-link" src="_images/Imaging-tutorial-phase-cal-clean_6.5.4.jpg" style="width: 500px;" /></p>
+<figcaption><p>Figure 3: The tclean GUI showing the clean mask circling the emission region.</p>
+</figcaption></figure><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf phase_cal.*&#39;</span><span class="p">)</span>
+
+<span class="n">tclean</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span><span class="p">,</span>
+       <span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;phase_cal&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span>
+       <span class="n">spw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+       <span class="n">specmode</span><span class="o">=</span><span class="s1">&#39;mfs&#39;</span><span class="p">,</span>
+       <span class="n">deconvolver</span><span class="o">=</span><span class="s1">&#39;hogbom&#39;</span><span class="p">,</span>
+       <span class="n">gridder</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+       <span class="n">imsize</span><span class="o">=</span><span class="p">[</span><span class="mi">250</span><span class="p">,</span><span class="mi">250</span><span class="p">],</span>
+       <span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.1arcsec&#39;</span><span class="p">],</span>
+       <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;briggs&#39;</span><span class="p">,</span>
+       <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;0mJy&#39;</span><span class="p">,</span>
+       <span class="n">niter</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+       <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>After running this task, you will be presented with the GUI as shown in Figure 3.</p>
+<p>In the TCLEAN viewer, make sure that your buttons are set to add a new oval mask region. You may need to click on the icon showing the “R” in an oval. Remember that the phase calibrator has been selected because it is a point source, so you should see a point source in the middle of the field. Draw an oval mask around the emission region (just the central dot). If you don’t like the region you’ve selected, hover the mouse over it and hit “Esc”. If you do like it, double click inside the oval and
+watch it turn white to create the mask (See Figure 3). When setting the clean mask, you should aim to capture the real emission and not much else. If you don’t like the mask you have created, toggle the “Add” option to “Erase”, draw a region around the mask, and then double click to remove the mask. In the “Next Action” section of the GUI, you will notice several control buttons. Hit the green circle button to begin the cleaning process. This will run a major cycle of cleaning and then return.
+After the first major cycle of cleaning, the plot displays the residual emission. Compare the brightness of the residuals with that of the source and with that of the noise. When you are satisfied (or when tclean has met the residual threshold, 0 mJy by default - meaning that it stops at the first negative), click the red “X” and tclean will terminate. In this example, two rounds of cleaning work well. For more complex targets you may need many rounds of cleaning, and it is possible to update
+and add new tclean regions after each major cycle, based on the look of the residuals. You’re aiming for the residuals inside the mask (i.e. the residuals left over for the source, after subtracting the scaled model) to look about the same as the noise outside the mask.</p>
+<p>Have a quick look at the files that tclean has created.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">ls</span>
+</pre></div>
+</div>
+</div>
+<p>All the resulting files have the “phase_cal” prefix, with different extensions:</p>
+<ul class="simple">
+<li><p>.image is the final cleaned image</p></li>
+<li><p>.mask shows the clean mask, or the area that tclean cleaned</p></li>
+<li><p>.model is the set of modeled clean components used by tclean (in Jy/pixel)</p></li>
+<li><p>.pb shows the primary beam response</p></li>
+<li><p>.residual shows what was left after you stopped tclean (the “dirty” part of the final image)</p></li>
+<li><p>.psf shows the synthesized beam</p></li>
+<li><p>.sumwt is a single pixel image containing sum of weights per plane</p></li>
+</ul>
+<p>So much good stuff. You can look at all of these using CARTA. If you are using NRAO machines, you can navigate to your working directory in a terminal, and then type:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-bash notranslate"><div class="highlight"><pre><span></span>%%bash
+<span class="c1"># In bash</span>
+carta<span class="w"> </span>--no_browser
+</pre></div>
+</div>
+</div>
+<p>Copy the URL it returns and paste into a browser window to view your CARTA session.</p>
+</section>
+<section id="Experiment-with-TCLEAN">
+<h2>Experiment with TCLEAN<a class="headerlink" href="#Experiment-with-TCLEAN" title="Permalink to this heading"></a></h2>
+<p>includes a lot of options. Remember, you can see the list of inputs for the task by typing “inp tclean”. Now is a good time to get a feel for what these options can do. One option that is very commonly tweaked by the user is the weighting scheme used to grid the UV data into a fourier-plane image. This weighting was “robust=0.5” in the first example (by default). Try a few different values of the robust parameter between -2 (uniform) and 2 (natural). Pay attention to how the beam size changes,
+as well as the noise in the final image. You can check the noise level using CARTA – draw a box on the image and click the ‘Statistics’ widget (looks like a calculator) at the top of the window. Remove old versions of the image in case you have run this before:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf phase_cal_robust.*&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Call tclean with briggs weighting and robust = -1. Make a clean mask and run a few cycles of tclean, until you are happy with the level of the residuals:</p>
+<figure><p><img alt="43e4829655a243848eae7f47f03f2146" class="no-scaled-link" src="_images/Imaging-tutorial-phase-cal-robust_6.5.4.jpg" style="width: 500px;" /></p>
+<figcaption><p>Figure 4: CARTA image of the phase calibrator after tclean with briggs weighting.</p>
+</figcaption></figure><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">tclean</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span><span class="p">,</span>
+       <span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;phase_cal_robust&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span>
+       <span class="n">spw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+       <span class="n">specmode</span><span class="o">=</span><span class="s1">&#39;mfs&#39;</span><span class="p">,</span>
+       <span class="n">gridder</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+       <span class="n">deconvolver</span><span class="o">=</span><span class="s1">&#39;hogbom&#39;</span><span class="p">,</span>
+       <span class="n">imsize</span><span class="o">=</span><span class="p">[</span><span class="mi">250</span><span class="p">,</span><span class="mi">250</span><span class="p">],</span>
+       <span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.1arcsec&#39;</span><span class="p">],</span>
+       <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;briggs&#39;</span><span class="p">,</span>
+       <span class="n">robust</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span>
+       <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;0mJy&#39;</span><span class="p">,</span>
+       <span class="n">niter</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+       <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now is a good time to experiment a bit with tclean - try imaging the other calibrators (fields 0 and 2; check the ‘ScanIntent’ again in the output) and making the image size and cell size larger and smaller.</p>
+<p>For example, let’s look at the marginally-resolved primary (flux) calibrator, Ceres (field 2; ‘ScanIntent’ = ‘CALIBRATE_AMPLI#ON_SOURCE’):</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf amp_cal_robust.*&#39;</span><span class="p">)</span>
+
+<span class="n">tclean</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span><span class="p">,</span>
+       <span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;amp_cal_robust&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span>
+       <span class="n">spw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+       <span class="n">specmode</span><span class="o">=</span><span class="s1">&#39;mfs&#39;</span><span class="p">,</span>
+       <span class="n">gridder</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+       <span class="n">deconvolver</span><span class="o">=</span><span class="s1">&#39;hogbom&#39;</span><span class="p">,</span>
+       <span class="n">imsize</span><span class="o">=</span><span class="p">[</span><span class="mi">250</span><span class="p">,</span><span class="mi">250</span><span class="p">],</span>
+       <span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.1arcsec&#39;</span><span class="p">],</span>
+       <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;briggs&#39;</span><span class="p">,</span>
+       <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;0mJy&#39;</span><span class="p">,</span>
+       <span class="n">niter</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+       <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Look at the image in CARTA. Notice that Ceres is somewhat resolved, as we saw from the plots above.</p>
+<p>If you try a really big pixel size you will see things break. It is recommended to have the pixel size small compared to the synthesized beam for tclean purposes (tclean quantizes the deconvolution in units of pixels). When the pixel size is big compared to the synthesized beam the imaging in general will degrade, even independent of how you tclean.</p>
+<figure><p><img alt="6deff3da94ed461db25c647dacad9eed" class="no-scaled-link" src="_images/Imaging-tutorial-amp-cal-big-pix_6.5.4.jpg" style="width: 500px;" /></p>
+<figcaption><p>Figure 5: CARTA image of the amplitude calibrator after tclean with a large pixel size.</p>
+</figcaption></figure><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf amp_cal_bigpix.*&#39;</span><span class="p">)</span>
+
+<span class="n">tclean</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span><span class="p">,</span>
+       <span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;amp_cal_bigpix&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span>
+       <span class="n">spw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+       <span class="n">specmode</span><span class="o">=</span><span class="s1">&#39;mfs&#39;</span><span class="p">,</span>
+       <span class="n">gridder</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+       <span class="n">deconvolver</span><span class="o">=</span><span class="s1">&#39;hogbom&#39;</span><span class="p">,</span>
+       <span class="n">imsize</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">],</span>
+       <span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.5arcsec&#39;</span><span class="p">],</span>
+       <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;briggs&#39;</span><span class="p">,</span>
+       <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;0mJy&#39;</span><span class="p">,</span>
+       <span class="n">niter</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+       <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>To see the issues clearly here, compare the beam in this image to the one in the first image we made (with 5x smaller pixels).</p>
+</section>
+<section id="ASIDE:-See-the-effects-of-calibration-and-flagging">
+<h2>ASIDE: See the effects of calibration and flagging<a class="headerlink" href="#ASIDE:-See-the-effects-of-calibration-and-flagging" title="Permalink to this heading"></a></h2>
+<p>This section gives an aside intended to demonstrate the effect of calibration. If you are focused on learning only imaging, feel free to skip this section.</p>
+<p>The data that we are imaging went through a careful and detailed calibration process. What effect did this actually have? Let’s image the phase calibrator with and without calibration and with and without flagging just to get an idea of how our processing changed the final image.</p>
+<p>First you need to copy the uncalibrated data from the working directory. This step will differ depending on where you are storing the data. The net result we want is to have a copy of the uncalibrated data in the current working directory.</p>
+<p>If you downloaded the full data package, copy the uncalibrated data to your current working directory.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;tar -xvf ../working/twhya_uncalibrated.ms.tar&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>If you downloaded only the calibrated data set, you can use “wget” again to download the uncalibrated data at this time:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-bash notranslate"><div class="highlight"><pre><span></span>%%bash
+<span class="c1"># In bash</span>
+<span class="w"> </span>%<span class="w"> </span>wget<span class="w"> </span>-r<span class="w"> </span>-np<span class="w"> </span>-nH<span class="w"> </span>--cut-dirs<span class="o">=</span><span class="m">4</span><span class="w"> </span>--reject<span class="w"> </span><span class="s2">&quot;index.html*&quot;</span><span class="w"> </span>https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_uncalibrated.ms.tar
+</pre></div>
+</div>
+</div>
+<p>Or you can download the file via your browser at the following links: <a class="reference external" href="https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_uncalibrated.ms.tar">https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_uncalibrated.ms.tar</a></p>
+<p>Now let’s TCLEAN the uncalibrated data, again focusing on the phase calibrator (field 3) and using the same calls as before.</p>
+<figure><p><img alt="03dc8407a11440f39235c1c80f49cf51" class="no-scaled-link" src="_images/Imaging-tutorial-phase-cal-uncalibrated_6.5.4.jpg" style="width: 500px;" /></p>
+<figcaption><p>Figure 6: The phase calibrator without any calibration.</p>
+</figcaption></figure><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf phase_cal_uncalibrated.*&#39;</span><span class="p">)</span>
+<span class="n">tclean</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_uncalibrated.ms&#39;</span><span class="p">,</span>
+       <span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;phase_cal_uncalibrated&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span>
+       <span class="n">spw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+       <span class="n">specmode</span><span class="o">=</span><span class="s1">&#39;mfs&#39;</span><span class="p">,</span>
+       <span class="n">gridder</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+       <span class="n">deconvolver</span><span class="o">=</span><span class="s1">&#39;hogbom&#39;</span><span class="p">,</span>
+       <span class="n">imsize</span><span class="o">=</span><span class="p">[</span><span class="mi">250</span><span class="p">,</span><span class="mi">250</span><span class="p">],</span>
+       <span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.1arcsec&#39;</span><span class="p">],</span>
+       <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;briggs&#39;</span><span class="p">,</span>
+       <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;0mJy&#39;</span><span class="p">,</span>
+       <span class="n">niter</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+       <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>If you can find a source to tclean then more power to you, but this is a mess. It’s a good thing that we calibrated… In the raw (but still Tsys and WVR corrected) data you can see echos of the calibrator throughout the field, but the calibration is required to make the image coherent. Inspect the imaged uncalibrated data using CARTA.</p>
+<p>Now let’s see the effect that flagging had on the data. Copy the unflagged (but otherwise calibrated) data from the working directory to our local directory:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;tar -xvf ../working/twhya_calibrated_unflagged.ms.tar&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>or again, using wget:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-bash notranslate"><div class="highlight"><pre><span></span>%%bash
+<span class="c1"># In bash</span>
+<span class="w"> </span>%<span class="w"> </span>wget<span class="w"> </span>-r<span class="w"> </span>-np<span class="w"> </span>-nH<span class="w"> </span>--cut-dirs<span class="o">=</span><span class="m">4</span><span class="w"> </span>--reject<span class="w"> </span><span class="s2">&quot;index.html*&quot;</span><span class="w"> </span>https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_calibrated_unflagged.ms.tar
+</pre></div>
+</div>
+</div>
+<p>Or you can download the file via your browser at the following links: <a class="reference external" href="https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_calibrated_unflagged.ms.tar">https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_calibrated_unflagged.ms.tar</a></p>
+<p>Now image the calibrated but unflagged data for the secondary calibrator using the same parameters as before.</p>
+<figure><p><img alt="d636cfe37a224e3e9fe30d54b2cc19d8" class="no-scaled-link" src="_images/Imaging-tutorial-phase-cal-unflagged_6.5.4.jpg" style="width: 500px;" /></p>
+<figcaption><p>Figure 7: CARTA image of the phase calibrator without any flagging of bad data.</p>
+</figcaption></figure><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf phase_cal_unflagged.*&#39;</span><span class="p">)</span>
+
+<span class="n">tclean</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated_unflagged.ms&#39;</span><span class="p">,</span>
+       <span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;phase_cal_unflagged&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span>
+       <span class="n">spw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+       <span class="n">specmode</span><span class="o">=</span><span class="s1">&#39;mfs&#39;</span><span class="p">,</span>
+       <span class="n">gridder</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+       <span class="n">deconvolver</span><span class="o">=</span><span class="s1">&#39;hogbom&#39;</span><span class="p">,</span>
+       <span class="n">imsize</span><span class="o">=</span><span class="p">[</span><span class="mi">250</span><span class="p">,</span><span class="mi">250</span><span class="p">],</span>
+       <span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.1arcsec&#39;</span><span class="p">],</span>
+       <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;briggs&#39;</span><span class="p">,</span>
+       <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;0mJy&#39;</span><span class="p">,</span>
+       <span class="n">niter</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+       <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>In contrast to the uncalibrated data, the unflagged data are coherent, but they have clear artifacts in the residuals. Flagging has definitely improved the quality of the data, but in overall good quality data like we have here, we can see the target source.</p>
+</section>
+<section id="Image-the-science-target">
+<h2>Image the science target<a class="headerlink" href="#Image-the-science-target" title="Permalink to this heading"></a></h2>
+<p>Of course, the whole point of calibration is to calibrate the <em>science</em> data. Here, the TW Hydra observations use field 5, which we know from the output of , above. As the final step in the basic imaging tutorial, let’s now image the continuum in TW Hydra. First, we will “split out” the science data into its own data set using the CASA task . While not strictly necessary, this is a common step that makes managing the data easier. At the same time we will smooth (i.e. average) the data in
+frequency using width=8 to do the averaging. This reduces the data volume without losing much information, since we are really only interested in continuum imaging at this point. Although this data set was already designed to be manageable, this smoothing trick is good to keep in mind because ALMA can produce very large data sets.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf twhya_smoothed.ms&#39;</span><span class="p">)</span>
+
+<span class="n">split</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_calibrated.ms&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="n">outputvis</span><span class="o">=</span><span class="s1">&#39;twhya_smoothed.ms&#39;</span><span class="p">,</span> <span class="n">datacolumn</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+
+<span class="n">listobs</span><span class="p">(</span><span class="s1">&#39;twhya_smoothed.ms&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now make a continuum image of the split-out data. Notice that TW Hydra has now been re-labeled as field 0 in the new data set because we split out only that field. We’ll use the same tclean settings as for the phase calibrator, since we have covered the full primary beam with our image size and cell size combination. Again, specify interactive mode and leave the threshold unset for the time being.</p>
+<figure><p><img alt="47b87414366f4977a10a22ea0adc7d0b" class="no-scaled-link" src="_images/Imaging-tutorial-twhydra-cont_6.5.4.jpg" style="width: 500px;" /></p>
+<figcaption><p>Figure 8: Continuum image for TW Hydra.</p>
+</figcaption></figure><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf twhya_cont.*&#39;</span><span class="p">)</span>
+
+<span class="n">tclean</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_smoothed.ms&#39;</span><span class="p">,</span>
+       <span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;twhya_cont&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">,</span>
+       <span class="n">spw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+       <span class="n">specmode</span><span class="o">=</span><span class="s1">&#39;mfs&#39;</span><span class="p">,</span>
+       <span class="n">gridder</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+       <span class="n">deconvolver</span><span class="o">=</span><span class="s1">&#39;hogbom&#39;</span><span class="p">,</span>
+       <span class="n">imsize</span><span class="o">=</span><span class="p">[</span><span class="mi">250</span><span class="p">,</span><span class="mi">250</span><span class="p">],</span>
+       <span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.1arcsec&#39;</span><span class="p">],</span>
+       <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;briggs&#39;</span><span class="p">,</span>
+       <span class="n">robust</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+       <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;0mJy&#39;</span><span class="p">,</span>
+       <span class="n">niter</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+       <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Draw a clean mask around the visible emission using the mask tools and then run tclean until the emission from the TW Hydra disk is less than or comparable to the residuals around it. In this interactive mode of cleaning, you decide when tclean should stop, and at that point you hit the red X. If instead you did want to clean automatically down to a threshold, you can specify a threshold that is a small multiple of the rms noise either in the call to tclean above or by typing it in to the tclean
+GUI if you started the session interactively.</p>
+<p>Have a look at the image - TW Hydra is very bright and you can see that it is extended relative to the size of the beam, which is represented by an oval, with major and minor axes marked, in the very bottom left corner of the CARTA image window. The residuals aren’t perfect, but we will improve them in subsequent lessons.</p>
+<p>But wait! you might be asking. Didn’t you say that there are spectral lines in this spectral window? Yes, the spectral window that we have imaged here as continuum also contains a N2H+ emission line. In this case, the N2H+ emission is faint enough that neglecting to flag the line channels before imaging makes no difference to the final continuum image. For this and the other continuum first look tutorials, we have thus ignored the line to focus on the basic steps of imaging and self-calibration.
+In general, however, you should flag channels containing emission lines in your own data prior to imaging the continuum. To see how to flag line emission prior to imaging the continuum in a spectral window, please see the more advanced tutorial at <a class="reference external" href="IRAS16293_Band9_-_Imaging">IRAS16293_Band9_-_Imaging</a>.</p>
+</section>
+<section id="Non-interactive-clean">
+<h2>Non-interactive clean<a class="headerlink" href="#Non-interactive-clean" title="Permalink to this heading"></a></h2>
+<p>So far we have mostly followed an interactive process with tclean. tclean can also be set up to run without interactive guidance. The three main parameters to specify are the threshold at which to stop (when the maximum residual in the tclean region is lower than this threshold, tclean stops), the mask (the region in which tclean is willing to identify signal), and the maximum number of iterations. The max iterations is not strictly required and it is generally recommended that it be used as
+more of a failsafe. That is, set it to a number so high that if tclean gets there something has gone wrong.</p>
+<p>First let’s take a stab at determining a clean mask. Look at the image you just made. All of the obvious emission is contained in a box that is bounded by pixel numbers in a range of something like (100,100) to (150,150). We’ll set that box to be a mask using the “mask” parameter in the call to tclean. You could also set it by supplying a file (for example the one created from your earlier interactive version of tclean).</p>
+<p>Now let’s determine a stopping threshold for tclean. Again, look at the previous image using CARTA and draw a box well away from the source to estimate the noise. Like before, look at the ‘Statistics’ tab in the ‘Regions’ box of the interface to find the RMS noise. We see something like ~7 mJy/beam. Set the threshold to be about twice this, ~15 mJy/beam. A clean threshold several times the rms noise is usually recommended to avoid adding false sources to the deconvolved image. That is, you do
+not want tclean to treat a random noise spike as a source and deconvolve it from the image. This can be particularly problematic if you are doing self-calibration (a later lesson). Finally set niter=10000, which is a lot of iterations. We expect tclean to terminate before reaching this. For our purposes this is just a big number that’s designed to keep tclean from running forever.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf twhya_cont_auto.*&#39;</span><span class="p">)</span>
+
+<span class="n">tclean</span><span class="p">(</span><span class="n">vis</span><span class="o">=</span><span class="s1">&#39;twhya_smoothed.ms&#39;</span><span class="p">,</span>
+       <span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;twhya_cont_auto&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">,</span>
+       <span class="n">spw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+       <span class="n">specmode</span><span class="o">=</span><span class="s1">&#39;mfs&#39;</span><span class="p">,</span>
+       <span class="n">gridder</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+       <span class="n">deconvolver</span><span class="o">=</span><span class="s1">&#39;hogbom&#39;</span><span class="p">,</span>
+       <span class="n">imsize</span><span class="o">=</span><span class="p">[</span><span class="mi">250</span><span class="p">,</span><span class="mi">250</span><span class="p">],</span>
+       <span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.1arcsec&#39;</span><span class="p">],</span>
+       <span class="n">mask</span><span class="o">=</span><span class="s1">&#39;box [ [100pix , 100pix] , [150pix, 150pix] ]&#39;</span><span class="p">,</span>
+       <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;briggs&#39;</span><span class="p">,</span>
+       <span class="n">robust</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+       <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;15mJy&#39;</span><span class="p">,</span>
+       <span class="n">niter</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+       <span class="n">interactive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Look ma, no hands!</p>
+<p>This noninteractive mode can save you a lot of time and has the advantage of being very reproducible. Note that you also have a “hybrid” mode available by starting the tclean process with interactive=True, but then click the blue arrow button in the top right corner. This tells tclean to proceed until it hits the maximum number of iterations or the threshold. This combination mode is nice because you can manually draw the mask used to tclean. Note that you can also manually set both the
+threshold and the maximum number of iterations (which is the product of the number of major cycles and the iterations per cycle) in the viewer GUI. Note, however, that best practice for an image with uncertain calibration and especially one with a bright source, is to clean interactively at least the first time. In the case where an image may be “dynamic range limited” (i.e., the quality is set by the accuracy of calibration and deconvolution) it can be hard to predict the correct threshold.</p>
+<p>As the cleaning cycles proceed, the residuals in the image should decrease. You can check this in the tclean output in the logger; if the residuals start to increase you may need to change your stopping threshold.</p>
+</section>
+<section id="Primary-beam-correction">
+<h2>Primary beam correction<a class="headerlink" href="#Primary-beam-correction" title="Permalink to this heading"></a></h2>
+<p>An important subtlety of is that by default the image produced by tclean is not corrected for the primary beam (the field of view) of the individual dishes in the array. The primary beam response is typically a Gaussian with value 1 at the center of the field. To form an astronomically correct image of the sky, the output of tclean needs to be divided by this primary beam (or, in the case of mosaics, the combination of primary beam patterns used to make the mosaic). For tclean, there are two
+ways to do this.</p>
+<p>First, you can set the parameter pbcor = True when running tclean. This will produce an additional image with the extension .image.pbcor, which is the cleaned image corrected for the primary beam.</p>
+<p>Second, CASA stores the primary beam information needed to make this correction in the file with the .pb extension. The CASA task impbcor can be used to combine the .pb image with the output image from TCLEAN to produce a primary-beam corrected image.</p>
+<p>First remove the old primary beam corrected image if it exists</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf twhya_cont.pbcor.image&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now correct the image with , and then inspect the output image in CARTA:</p>
+<figure><p><img alt="213754cc28264e4e86a0dd4941c704f9" class="no-scaled-link" src="_images/Imaging-tutorial-pb-correct_6.5.4.jpg" style="width: 500px;" /></p>
+<figcaption><p>Figure 9: Continuum image for TW Hydra, corrected for the primary beam.</p>
+</figcaption></figure><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In CASA</span>
+<span class="n">impbcor</span><span class="p">(</span><span class="n">imagename</span><span class="o">=</span><span class="s1">&#39;twhya_cont.image&#39;</span><span class="p">,</span>
+        <span class="n">pbimage</span><span class="o">=</span><span class="s1">&#39;twhya_cont.pb&#39;</span><span class="p">,</span>
+        <span class="n">outfile</span><span class="o">=</span><span class="s1">&#39;twhya_cont.pbcor.image&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>It’s often very convenient to work in images before primary beam correction because the noise is the same across the field (e.g., this is a clean data set to search for signal) but it’s very important to remember to apply this correction before calculating fluxes or intensities for science.</p>
+<p>The imaging of the continuum for this data continues in <a class="reference external" href="First_Look_at_Self_Calibration">First Look at Self Calibration</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="General Workflow for Conversion" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NRAO 2025 built from OpenAstronomy template.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

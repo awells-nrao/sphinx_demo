@@ -1,0 +1,1402 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "5b307306",
+   "metadata": {},
+   "source": [
+    "# First Look at Imaging\n",
+    "\n",
+    "## About this Guide\n",
+    "\n",
+    "This guide features [CARTA](https://cartavis.org/), the “Cube Analysis and Rendering Tool for Astronomy,” which is the new NRAO visualization tool for images and cubes. The CASA viewer ([imview](https://casadocs.readthedocs.io/en/v6.6.1/api/tt/casaviewer.imview.html)) has not been maintained for a few years and will be removed from future versions of CASA. We strongly recommend using CARTA, as it provides a much more efficient, stable, and feature rich user experience. A comparison of the CASA viewer and CARTA, as well as instructions on how to use CARTA at NRAO, is provided in the [CARTA section of the CASA docs](https://casadocs.readthedocs.io/en/v6.6.1/notebooks/carta.html).\n",
+    "\n",
+    "The purpose of this tutorial is to provide a first look at imaging ALMA\n",
+    "data for those new to CASA.\n",
+    "\n",
+    "Data delivered by ALMA is pre-calibrated either by ARC staff or by the\n",
+    "ALMA calibration pipeline. The delivered data is ready for imaging. This\n",
+    "tutorial demonstrates the basic procedures that will help you complete\n",
+    "the imaging steps.\n",
+    "\n",
+    "This guide covers the same material used in hands-on training sessions\n",
+    "at [NRAO Community Days\n",
+    "events](https://science.nrao.edu/facilities/alma/naasc-workshops/facilities/alma/community)\n",
+    "and ALMA Data Reduction tutorials presented by NAASC staff.\n",
+    "\n",
+    "## Getting CASA\n",
+    "\n",
+    "If you do not already have CASA installed on your machine, you will have\n",
+    "to download and install it.\n",
+    "\n",
+    "Download and installation instructions are available here:\n",
+    "\n",
+    "<http://casa.nrao.edu/casa_obtaining.shtml>\n",
+    "\n",
+    "## About the Sample Data: Continuum and N2H+ in TW Hydra\n",
+    "\n",
+    "The data for this example comes from ALMA Project 2011.0.00340.S,\n",
+    "\"Searching for H2D+ in the disk of TW Hya v1.5\", for which the PI is\n",
+    "Chunhua Qi. Part of the data for this project has been published in\n",
+    "\\[<http://adsabs.harvard.edu/abs/2013Sci>...341..630Q Qi et al. 2013\\].\n",
+    "\n",
+    "The original observation had three scientific objectives:\n",
+    "\n",
+    "1.  Image the submm continuum structure in TW Hydra\n",
+    "2.  Image the H2D+ line structure (rest frequency 372.42138 GHz)\n",
+    "3.  Image the N2H+ line structure (rest frequency 372.67249 GHz)\n",
+    "\n",
+    "The data used in our tutorial has already been calibrated. Furthermore,\n",
+    "to make the data set more manageable, we have reduced it in size by\n",
+    "averaging in time and frequency. Our goal will be to image the continuum\n",
+    "emission and the N2H+ spectral line, which is bright and well suited for\n",
+    "demonstrating the imaging techniques.\n",
+    "\n",
+    "The spectral window we will image covers 234.375 MHz in bandwidth, and\n",
+    "contains 384 channels spaced by 610 kHz. The data includes observations\n",
+    "from 19 of the ALMA 12-m main array antennas, observed during Early\n",
+    "Science Cycle 0.\n",
+    "\n",
+    "## Getting the Data\n",
+    "\n",
+    "The data used in this tutorial is part of a larger data package used for\n",
+    "NRAO calibration and imaging tutorials. If you plan on working through\n",
+    "all of the \"First Look\" tutorials for CASA beginners, it is worth\n",
+    "downloading the entire package now. If you plan on working through just\n",
+    "this imaging tutorial then you can download a smaller data package (see\n",
+    "below).\n",
+    "\n",
+    "The complete package (1.8G tarred and zipped, 2.6G unpacked) is\n",
+    "available here:\n",
+    "\n",
+    "<https://bulk.cv.nrao.edu/almadata/public/casaguides/FirstLook_TWHya_Band7_6.6.1/>\n",
+    "\n",
+    "You can then unpack the data as follows:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "96884fbd",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%%bash\n",
+    "# In bash\n",
+    "tar -xvzf twhya_firstlook.tgz"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "77c52724",
+   "metadata": {},
+   "source": [
+    "For the imaging tutorial, we are interested in the data that have been\n",
+    "flagged and calibrated. The relevant data set is called\n",
+    "\"twhya\\_calibrated.ms\". You should copy this data set into a new working\n",
+    "directory, and you will start CASA from that directory. (If you want to\n",
+    "run the script created using extractCASAscript.py, found in the [\n",
+    "Extracting scripts from these tutorials\n",
+    "guide](https://casaguides.nrao.edu/index.php/Extracting_scripts_from_these_tutorials), you will\n",
+    "want to place the extracted script in your MyTutorial directory.)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d0c4a8c8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%%bash\n",
+    "# In bash\n",
+    "cd working\n",
+    "tar -xvf twhya_calibrated.ms.tar\n",
+    "cd ..\n",
+    "mkdir MyTutorial\n",
+    "cd MyTutorial\n",
+    "cp -r ../working/twhya_calibrated.ms ."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3d54f21d",
+   "metadata": {},
+   "source": [
+    "Alternatively, if you do not want to download the full 1.8G data\n",
+    "package, you can download just the smaller data file (416M tarred, 1G\n",
+    "unpacked) needed specifically for this tutorial as follows:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e267f09f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%%bash\n",
+    "# In bash\n",
+    "mkdir MyTutorial\n",
+    "cd MyTutorial\n",
+    "wget -r -np -nH --cut-dirs=4 --reject \"index.html*\" https://bulk.cv.nrao.edu/almadata/public/casaguides/FirstLook_TWHya_Band7_6.6.1/twhya_calibrated.ms.tar"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f78490da",
+   "metadata": {},
+   "source": [
+    "Or you can download the file via your browser at the following link:\n",
+    "<https://bulk.cv.nrao.edu/almadata/public/casaguides/FirstLook_TWHya_Band7_6.6.1/twhya_calibrated.ms.tar>\n",
+    "\n",
+    "## Starting CASA\n",
+    "\n",
+    "At this point you should be working in a unix shell from the directory\n",
+    "that contains the data. An \"ls\" command should show you the data file\n",
+    "\"twhya\\_calibrated.ms\" in the current working directory."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b64ab5a9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%%bash\n",
+    "# In bash\n",
+    "ls"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5ddb58d1",
+   "metadata": {},
+   "source": [
+    "And now you can start CASA:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0def53ab",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%%bash\n",
+    "# In bash\n",
+    "casa"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "feba471f",
+   "metadata": {},
+   "source": [
+    "You will notice that CASA opens a message window, for feedback from CASA\n",
+    "tasks. The CASA prompt is presented in the terminal window. CASA is\n",
+    "running on a python interpreter, so python syntax is valid here. (NOTE:\n",
+    "If you are working on NRAO machines, call casa-alma instead of simply\n",
+    "casa to get the current version being used for ALMA data.)\n",
+    "\n",
+    "When you are finished working with your data, you can end your CASA\n",
+    "session by typing \"exit\" at the command prompt.\n",
+    "\n",
+    "## Some CASA basics\n",
+    "\n",
+    "A complete description of CASA is available in the\n",
+    "[documentation](https://casadocs.readthedocs.io/en/v6.6.1/). Here we\n",
+    "will touch on a couple of useful concepts to get us started.\n",
+    "\n",
+    "A few unix commands work directly in CASA, for example you can try the\n",
+    "\"ls\" command and the \"pwd\" command:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f07451c8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "ls\n",
+    "pwd"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2f697517",
+   "metadata": {},
+   "source": [
+    "You can access all operating system commands as follows:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "495993dc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('ls')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d422b45e",
+   "metadata": {},
+   "source": [
+    "It is often convenient to store CASA instructions in a python script. If\n",
+    "you have such a script, it can be executed using the following syntax:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8b5a5a1e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "# if you are running this as an extracted script, comment this line out\n",
+    "execfile('my_script.py',globals())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3ffbf745",
+   "metadata": {},
+   "source": [
+    "## Using tasks, and getting oriented with the data\n",
+    "\n",
+    "The first step in all data reduction with CASA is to examine the header\n",
+    "information and data structure for the data set using the  task. In\n",
+    "CASA, there are two ways to execute tasks. You can either set the\n",
+    "parameters one-by-one and then instruct CASA to \"go\" when you're ready,\n",
+    "or you can execute the task with a single command. For example, here is\n",
+    "how you can use the first method:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1c71c2c0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "inp listobs\n",
+    "vis='twhya_calibrated.ms'\n",
+    "go"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "013a8a3d",
+   "metadata": {},
+   "source": [
+    "And here is an example of running the  task with a single call from the\n",
+    "command line:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "39254103",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "listobs(vis='twhya_calibrated.ms')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d173ba6e",
+   "metadata": {},
+   "source": [
+    "This single call is the preferred method, as it works in scripts. The\n",
+    "output for  is printed to the CASA Message window. If you would like to\n",
+    "save the output to a text file as well, you can give  a file name to\n",
+    "save to:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ef762493",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "listobs(vis='twhya_calibrated.ms',listfile='twhya_listobs.txt')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f39934c2",
+   "metadata": {},
+   "source": [
+    "Note that you can get help on any CASA task:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ddc3002c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "help listobs"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b160823a",
+   "metadata": {},
+   "source": [
+    "You can exit the help menu at any time by typing the letter \"q\".\n",
+    "\n",
+    "The listobs output for our data set is as follows:\n",
+    "\n",
+    "    ================================================================================\n",
+    "                       MeasurementSet Name:  /path/to/my/directory/MyTutorial/twhya_calibrated.ms      MS Version 2\n",
+    "    ================================================================================\n",
+    "       Observer: cqi     Project: uid://A002/X327408/X6f  \n",
+    "    Observation: ALMA\n",
+    "    Data records: 68335       Total elapsed time = 5647.68 seconds\n",
+    "               Observed from   19-Nov-2012/07:36:57.0   to   19-Nov-2012/09:11:04.7 (UTC)\n",
+    "    \n",
+    "       ObservationID = 0         ArrayID = 0\n",
+    "      Date        Timerange (UTC)          Scan  FldId FieldName             nRows     SpwIds   Average Interval(s)    ScanIntent\n",
+    "      19-Nov-2012/07:36:57.0 - 07:39:13.1     4      0 J0522-364                 3420  [0]  [6.05] [CALIBRATE_BANDPASS#ON_SOURCE,CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  07:44:45.2 - 07:47:01.2     7      2 Ceres                     3420  [0]  [6.05] [CALIBRATE_AMPLI#ON_SOURCE,CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  07:52:42.0 - 07:53:47.6    10      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  07:56:23.5 - 08:02:11.3    12      5 TW Hya                    7616  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]\n",
+    "                  08:04:36.3 - 08:05:41.9    14      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  08:08:09.6 - 08:13:57.3    16      5 TW Hya                    8442  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]\n",
+    "                  08:16:20.6 - 08:17:26.2    18      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  08:19:53.9 - 08:25:41.7    20      5 TW Hya                    8389  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]\n",
+    "                  08:28:17.1 - 08:29:22.6    22      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  08:32:00.5 - 08:37:48.2    24      5 TW Hya                    8409  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]\n",
+    "                  08:40:11.9 - 08:41:17.4    26      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  08:43:45.6 - 08:49:33.4    28      5 TW Hya                    8514  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]\n",
+    "                  08:51:57.1 - 08:53:02.6    30      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  08:58:12.0 - 09:00:28.1    33      6 3c279                     3043  [0]  [6.05] [CALIBRATE_BANDPASS#ON_SOURCE,CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  09:01:35.7 - 09:02:41.2    34      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "                  09:05:15.6 - 09:07:31.6    36      5 TW Hya                    3402  [0]  [6.05] [OBSERVE_TARGET#ON_SOURCE]\n",
+    "                  09:09:59.1 - 09:11:04.7    38      3 J1037-295                 1710  [0]  [6.05] [CALIBRATE_PHASE#ON_SOURCE,CALIBRATE_WVR#ON_SOURCE]\n",
+    "               (nRows = Total number of rows per scan) \n",
+    "    Fields: 5\n",
+    "      ID   Code Name                RA               Decl           Epoch   SrcId      nRows\n",
+    "      0    none J0522-364           05:22:57.984648 -36.27.30.85128 J2000   0           3420\n",
+    "      2    none Ceres               06:10:15.950590 +23.22.06.90668 J2000   2           3420\n",
+    "      3    none J1037-295           10:37:16.079736 -29.34.02.81316 J2000   3          13680\n",
+    "      5    none TW Hya              11:01:51.796000 -34.42.17.36600 J2000   4          44772\n",
+    "      6    none 3c279               12:56:11.166576 -05.47.21.52464 J2000   5           3043\n",
+    "    Spectral Windows:  (1 unique spectral windows and 1 unique polarization setups)\n",
+    "      SpwID  Name                           #Chans   Frame   Ch0(MHz)  ChanWid(kHz)  TotBW(kHz) CtrFreq(MHz) BBC Num  Corrs\n",
+    "      0      ALMA_RB_07#BB_2#SW-01#FULL_RES    384   TOPO  372533.086       610.352    234375.0 372649.9688        2  XX  YY\n",
+    "    Sources: 5\n",
+    "      ID   Name                SpwId RestFreq(MHz)  SysVel(km/s)\n",
+    "      0    J0522-364           0     -              -\n",
+    "      1    Ceres               0     -              -\n",
+    "      2    J1037-295           0     -              -\n",
+    "      3    TW Hya              0     -              -\n",
+    "      4    3c279               0     -              -\n",
+    "    Antennas: 19:\n",
+    "      ID   Name  Station   Diam.    Long.         Lat.                Offset from array center (m)                ITRF Geocentric coordinates (m)\n",
+    "                                                                         East         North     Elevation               x               y               z\n",
+    "      1    DA42  A050      12.0 m   -067.45.16.2  -22.53.29.3         43.0352     -744.9713       21.6702  2225079.880016 -5440041.377534 -2481724.598031\n",
+    "      2    DA44  A068      12.0 m   -067.45.20.6  -22.53.25.7        -82.4232     -631.7828       23.5810  2224981.097784 -5440131.250387 -2481621.066374\n",
+    "      3    DA45  A070      12.0 m   -067.45.11.9  -22.53.29.3        166.1833     -743.4934       19.8811  2225193.450167 -5439993.764157 -2481722.540534\n",
+    "      4    DA46  A067      12.0 m   -067.45.12.7  -22.53.27.2        142.4097     -678.7318       20.1280  2225181.070532 -5440026.290790 -2481662.975103\n",
+    "      5    DA48  A046      12.0 m   -067.45.17.0  -22.53.29.3         21.4267     -742.7987       21.6757  2225060.202580 -5440050.344436 -2481722.598651\n",
+    "      6    DA49  A029      12.0 m   -067.45.18.2  -22.53.25.8        -12.9134     -636.4552       22.1350  2225044.239583 -5440102.022535 -2481624.808405\n",
+    "      7    DA50  A045      12.0 m   -067.45.17.9  -22.53.30.1         -5.4183     -767.4398       22.6034  2225032.051652 -5440052.426015 -2481745.660003\n",
+    "      9    DV02  A077      12.0 m   -067.45.10.1  -22.53.25.9        217.6299     -637.5333       15.8376  2225255.259272 -5440008.987869 -2481623.352052\n",
+    "      11   DV05  A082      12.0 m   -067.45.08.3  -22.53.29.2        269.0433     -740.9521       15.7832  2225287.593766 -5439952.243679 -2481718.605314\n",
+    "      12   DV06  A037      12.0 m   -067.45.17.5  -22.53.28.8          6.7403     -727.3003       21.2086  2225048.729287 -5440061.085777 -2481708.139136\n",
+    "      14   DV08  A021      12.0 m   -067.45.17.2  -22.53.27.0         14.3196     -672.8108       21.3420  2225063.814715 -5440077.948261 -2481657.992572\n",
+    "      15   DV10  A071      12.0 m   -067.45.19.9  -22.53.23.5        -60.7887     -563.2541       23.3799  2225011.141945 -5440147.560932 -2481557.855663\n",
+    "      16   DV13  A072      12.0 m   -067.45.12.6  -22.53.24.0        147.1742     -580.5887       18.1825  2225199.254375 -5440058.161494 -2481571.803699\n",
+    "      17   DV15  A074      12.0 m   -067.45.12.1  -22.53.32.0        161.8159     -828.6196       18.7688  2225176.483514 -5439963.820451 -2481800.529842\n",
+    "      18   DV16  A069      12.0 m   -067.45.21.3  -22.53.30.2       -101.4797     -770.1047       23.2972  2224942.993176 -5440088.421459 -2481748.384855\n",
+    "      19   DV17  A138      12.0 m   -067.45.17.1  -22.53.34.4         19.1461     -901.2603       26.0137  2225036.269025 -5439997.853009 -2481870.267607\n",
+    "      20   DV18  A053      12.0 m   -067.45.17.3  -22.53.31.2         12.5939     -802.9941       21.5281  2225043.111690 -5440031.889497 -2481777.995870\n",
+    "      24   DV22  A011      12.0 m   -067.45.14.4  -22.53.28.4         95.9131     -716.5005       21.0898  2225132.810230 -5440031.115405 -2481698.143589\n",
+    "      25   DV23  A007      12.0 m   -067.45.15.1  -22.53.27.3         74.0152     -681.2926       21.3231  2225117.809276 -5440052.280005 -2481665.799049\n",
+    "\n",
+    "## Inspecting the data\n",
+    "\n",
+    "The [plotms](https://casadocs.readthedocs.io/en/v6.6.1/api/tt/casaplotms.plotms.html) task is an important and versatile tool that allows the user to\n",
+    "look at the UV data in a graphical manner. Let's start by plotting the\n",
+    "UV coverage for our data."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ae122647",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "plotms(vis='twhya_calibrated.ms', xaxis='u', yaxis='v', avgchannel='10000', avgspw=False, avgtime='1e9', avgscan=False, coloraxis='field', showgui=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "168b807f",
+   "metadata": {},
+   "source": [
+    "<figure>\n",
+    "    <img src=\"images/Imaging-tutorial-uv-coverage_6.5.4.jpg\" width=\"500\"/>\n",
+    "    <figcaption>Figure 1: UV coverage for the TW Hya data set.</figcaption>\n",
+    "</figure>\n",
+    "\n",
+    "You should see a GUI as in Figure 1. The colors in the UV coverage plot\n",
+    "identify different observing targets. Here we use arbitrarily large\n",
+    "values for channels to average over as well as time to average over, to\n",
+    "be sure that the average is done over all the channels for the full time\n",
+    "of the data set. You will see a warning about averaging over more\n",
+    "channels than exist, but  will simply average the channels that do\n",
+    "exist.\n",
+    "\n",
+    "<figure>\n",
+    "  <img src=\"images/Imaging-tutorial-amp-uvdist-ceres_6.5.4.jpg\" width=\"500\" />\n",
+    "  <figcaption>Figure 2: Amplitude vs. UVdist for Ceres.</figcaption>\n",
+    "</figure>\n",
+    "\n",
+    "At this point, you can experiment with the  GUI. For example, it is\n",
+    "often interesting and useful to examine the plot of amplitude vs. UV\n",
+    "distance. Select the \"Axes\" tab, then set the X Axis to \"UVDist\" and the\n",
+    "Data setting to \"Amp\". Under the \"Page\" tab, set Iteration Axis to\n",
+    "\"Field\". Then click the Plot button.\n",
+    "\n",
+    "You can step through the different calibrators and science targets using\n",
+    "the green arrow buttons at the bottom of the  GUI. Notice that for some\n",
+    "sources, including Ceres, we can see the amplitude change as a function\n",
+    "of UV distance as in Figure 2. These sources are spatially resolved, and\n",
+    "we will see this clearly in the imaging below.\n",
+    "\n",
+    "## First Look at TCLEAN\n",
+    "\n",
+    "''Starting with CASA 4.7, the imaging capabilities of  have been\n",
+    "refactored and improved in a task called , which is called by the user\n",
+    "in largely the same way as clean. In this guide, we will use solely\n",
+    "tclean. In the guide [ TCLEAN and ALMA](TCLEAN_and_ALMA \"wikilink\"), the\n",
+    "differences in syntax between clean and tclean are made more explicit.\n",
+    "For reference, legacy first look guides for older versions of CASA that\n",
+    "use  rather than  for imaging are kept in [ Archived ALMA\n",
+    "CASAguides](Archived_ALMA_CASAguides \"wikilink\"). ''\n",
+    "\n",
+    "In this dataset, the phase calibrator is identified by field 3. Let's\n",
+    "image this calibrator, as a simple source for a first attempt at tclean.\n",
+    "We'll image it into an image file called \"phase\\_cal\". First, in case\n",
+    "you've run this task before, let's remove old versions of the image that\n",
+    "use this name. (The \".\\*\" is needed because imaging produces several\n",
+    "files with the same root name)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7bdf031b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf phase_cal.*')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "730d9e3d",
+   "metadata": {},
+   "source": [
+    "Now we will use the task  to do the imaging. Here is an explanation of\n",
+    "how we set some of the parameters; see the documentation for a complete\n",
+    "list of  options.\n",
+    "\n",
+    "  - We will first image the phase calibrator, and set the image name to\n",
+    "    \"phase\\_cal\". To identify the phase calibrator in a measurement set,\n",
+    "    look at the 'ScanIntent' column in the output of . The phase\n",
+    "    calibrator should have the intent \"CALIBRATE\\_PHASE\\#ON\\_SOURCE\". In\n",
+    "    this MS, the phase calibrator is J1037-295, identified by field =\n",
+    "    \"3\".\n",
+    "  - We will use multifrequency synthesis (specmode = mfs) to make a\n",
+    "    single continuum image. Multifrequency synthesis combines data from\n",
+    "    all selected spectral channels into a single continuum image. If\n",
+    "    your observations cover a large frequency range, it is possible that\n",
+    "    the amplitude or structure of the source can change substantially\n",
+    "    with frequency. This is only a concern if the fractional bandwidth\n",
+    "    (delta\\_nu/nu\\_center) is greater than 10%. For this dataset it is\n",
+    "    not an issue. Therefore, we set deconvolver=hogbom, which uses\n",
+    "    nterms=1, telling tclean that each deconvolved component has a\n",
+    "    single amplitude at all frequencies.\n",
+    "  - We will image a single pointing, so we set gridder='standard'. If we\n",
+    "    had multiple, contiguous pointings-- or if we were simultaneously\n",
+    "    imaging 7m and 12m array data (even if only a single pointing of\n",
+    "    each)--- we would need to set gridder='mosaic'.\n",
+    "  - We set the cell size to 0.1 arcseconds, which places \\~5 pixels\n",
+    "    across the synthesized beam. As a rule of thumb, we'd like \\~5\n",
+    "    pixels across the smallest direction of our elliptical beam. For a\n",
+    "    small dataset, you may be able to determine a good cell size with a\n",
+    "    quick imaging call, and note the beam calculated by tclean. For many\n",
+    "    ALMA projects, however, this could take a substantial amount of\n",
+    "    time\\! You can estimate what the cell size should be by looking\n",
+    "    again at the uv-coverage. Change the x-axis to uvwave, and the cell\n",
+    "    size is roughly 206265/(longest baseline in wavelengths)/(number of\n",
+    "    cells across the beam). For this MS, this works out to 0.09\", which\n",
+    "    we round up to 0.1\". As you will see, tclean reports a synthesized\n",
+    "    beam size of 0.51\" x 0.42\", making this a decent choice.\n",
+    "  - We choose the image size then based on the cell size. We want our\n",
+    "    image to cover the primary beam of a single antenna. For single\n",
+    "    fields with the 7m antennas, the primary beam in arcseconds is \\~\n",
+    "    10608/nu\\_GHz, where nu\\_GHz is the central frequency expressed in\n",
+    "    GHz, and for single fields with the 12m antennas, the primary beam\n",
+    "    in arcseconds is \\~ 6300/nu\\_GHz. The TW Hya data were taken with\n",
+    "    12m antennas at a central frequency of 372.650 GHz, giving a primary\n",
+    "    beam of about 17\". (For point sources, full coverage of the primary\n",
+    "    beam becomes less important, especially for well-known calibrators,\n",
+    "    and so you might see in the weblogs for your data that calibrator\n",
+    "    images are a bit smaller than the primary beam estimate would\n",
+    "    suggest. This is to save disk space and processing time during\n",
+    "    pipeline runs\\!)\n",
+    "  - Image sizes can be arbitrary but should be symmetrical. Good\n",
+    "    practice is probably to round up to the nearest 10 or 100 pixels and\n",
+    "    if tclean does not like your choice, it will recommend in the logger\n",
+    "    window a better choice. The size of the primary beam suggests an\n",
+    "    image size then of 17\"/0.1 arcsec per cell = 170 cells. Note that\n",
+    "    with this image size, however, tclean will warn that there is a\n",
+    "    non-zero value at the edge of the primary beam. For well-known\n",
+    "    calibrators, this is likely not an issue, but we'll increase the\n",
+    "    image size here just to demonstrate. At a size of 245 x 245, the\n",
+    "    non-zero value warning goes away, but now tclean suggests a more\n",
+    "    efficient image size of 250 rather than 245. Thus we will use an\n",
+    "    image size of 250x250 cells.\n",
+    "\n",
+    "The  task will start in interactive mode, which allows you to manually\n",
+    "control the threshold, major cycles, and masking. For users familiar\n",
+    "with , note that in contrast with the clean task, leaving niter (the\n",
+    "maximum number of iterations) unset defaults to niter=0, and  is being\n",
+    "told not to do any cleaning. If there are no clean components in the\n",
+    "model -- for instance if this is the first invocation of tclean on this\n",
+    "field and spectral window for the given set of visibilities (MS) -- then\n",
+    "what will be created is the dirty cube or image. Here, we first run\n",
+    "tclean with niter unset."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c6a2322c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "tclean(vis='twhya_calibrated.ms',\n",
+    "       imagename='phase_cal',\n",
+    "       field='3',\n",
+    "       spw='',\n",
+    "       specmode='mfs',\n",
+    "       deconvolver='hogbom',\n",
+    "       gridder='standard',\n",
+    "       imsize=[250,250],\n",
+    "       cell=['0.1arcsec'],\n",
+    "       weighting='briggs',\n",
+    "       threshold='0.0mJy',\n",
+    "       interactive=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8312005e",
+   "metadata": {},
+   "source": [
+    "CASA is sure to tell you that you haven't done any cleaning with the\n",
+    "following warning:\n",
+    "\n",
+    "    WARN task_tclean    Restoring with an empty model image. Only residuals will be processed to form the output restored image.\n",
+    "\n",
+    "Run the command again, this time with niter set to some (arbitrarily\n",
+    "large) number:\n",
+    "\n",
+    "<figure>\n",
+    "    <img src=\"images/Imaging-tutorial-phase-cal-clean_6.5.4.jpg\" width=\"500\" />\n",
+    "    <figcaption>Figure 3: The tclean GUI showing the clean mask circling the emission region.</figcaption>\n",
+    "</figure>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9b2bcce1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf phase_cal.*')\n",
+    "\n",
+    "tclean(vis='twhya_calibrated.ms',\n",
+    "       imagename='phase_cal',\n",
+    "       field='3',\n",
+    "       spw='',\n",
+    "       specmode='mfs',\n",
+    "       deconvolver='hogbom',\n",
+    "       gridder='standard',\n",
+    "       imsize=[250,250],\n",
+    "       cell=['0.1arcsec'],\n",
+    "       weighting='briggs',\n",
+    "       threshold='0mJy',\n",
+    "       niter=5000,\n",
+    "       interactive=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "eb2b58d1",
+   "metadata": {},
+   "source": [
+    "After running this  task, you will be presented with the GUI as shown in\n",
+    "Figure 3.\n",
+    "\n",
+    "In the TCLEAN viewer, make sure that your buttons are set to add a new\n",
+    "oval mask region. You may need to click on the icon showing the \"R\" in\n",
+    "an oval. Remember that the phase calibrator has been selected because it\n",
+    "is a point source, so you should see a point source in the middle of the\n",
+    "field. Draw an oval mask around the emission region (just the central\n",
+    "dot). If you don't like the region you've selected, hover the mouse over\n",
+    "it and hit \"Esc\". If you do like it, double click inside the oval and\n",
+    "watch it turn white to create the mask (See Figure 3). When setting the\n",
+    "clean mask, you should aim to capture the real emission and not much\n",
+    "else. If you don't like the mask you have created, toggle the \"Add\"\n",
+    "option to \"Erase\", draw a region around the mask, and then double click\n",
+    "to remove the mask. In the \"Next Action\" section of the GUI, you will\n",
+    "notice several control buttons. Hit the green circle button to begin the\n",
+    "cleaning process. This will run a major cycle of cleaning and then\n",
+    "return. After the first major cycle of cleaning, the plot displays the\n",
+    "residual emission. Compare the brightness of the residuals with that of\n",
+    "the source and with that of the noise. When you are satisfied (or when\n",
+    "tclean has met the residual threshold, 0 mJy by default - meaning that\n",
+    "it stops at the first negative), click the red \"X\" and tclean will\n",
+    "terminate. In this example, two rounds of cleaning work well. For more\n",
+    "complex targets you may need many rounds of cleaning, and it is possible\n",
+    "to update and add new tclean regions after each major cycle, based on\n",
+    "the look of the residuals. You're aiming for the residuals inside the\n",
+    "mask (i.e. the residuals left over for the source, after subtracting the\n",
+    "scaled model) to look about the same as the noise outside the mask.\n",
+    "\n",
+    "Have a quick look at the files that tclean has created."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "513470a3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "ls"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b87fbce7",
+   "metadata": {},
+   "source": [
+    "All the resulting files have the \"phase\\_cal\" prefix, with different\n",
+    "extensions:\n",
+    "\n",
+    "  - .image is the final cleaned image\n",
+    "  - .mask shows the clean mask, or the area that tclean cleaned\n",
+    "  - .model is the set of modeled clean components used by tclean (in\n",
+    "    Jy/pixel)\n",
+    "  - .pb shows the primary beam response\n",
+    "  - .residual shows what was left after you stopped tclean (the \"dirty\"\n",
+    "    part of the final image)\n",
+    "  - .psf shows the synthesized beam\n",
+    "  - .sumwt is a single pixel image containing sum of weights per plane\n",
+    "\n",
+    "So much good stuff. You can look at all of these using CARTA. If you are\n",
+    "using NRAO machines, you can navigate to your working directory in a\n",
+    "terminal, and then type:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "739ebfd8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%%bash\n",
+    "# In bash\n",
+    "carta --no_browser"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fcb2eeed",
+   "metadata": {},
+   "source": [
+    "Copy the URL it returns and paste into a browser window to view your\n",
+    "CARTA session.\n",
+    "\n",
+    "## Experiment with TCLEAN\n",
+    "\n",
+    "includes a lot of options. Remember, you can see the list of inputs for\n",
+    "the task by typing \"inp tclean\". Now is a good time to get a feel for\n",
+    "what these options can do. One option that is very commonly tweaked by\n",
+    "the user is the weighting scheme used to grid the UV data into a\n",
+    "fourier-plane image. This weighting was \"robust=0.5\" in the first\n",
+    "example (by default). Try a few different values of the robust parameter\n",
+    "between -2 (uniform) and 2 (natural). Pay attention to how the beam size\n",
+    "changes, as well as the noise in the final image. You can check the\n",
+    "noise level using CARTA -- draw a box on the image and click the\n",
+    "'Statistics' widget (looks like a calculator) at the top of the window.\n",
+    "Remove old versions of the image in case you have run this before:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "36a2e933",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf phase_cal_robust.*')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bd4d21df",
+   "metadata": {},
+   "source": [
+    "Call tclean with briggs weighting and robust = -1. Make a clean mask and\n",
+    "run a few cycles of tclean, until you are happy with the level of the\n",
+    "residuals:\n",
+    "\n",
+    "<figure>\n",
+    "    <img src=\"images/Imaging-tutorial-phase-cal-robust_6.5.4.jpg\" width=\"500\" />\n",
+    "    <figcaption>Figure 4: CARTA image of the phase calibrator after tclean with briggs weighting.</figcaption>\n",
+    "</figure>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f62c726b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "tclean(vis='twhya_calibrated.ms',\n",
+    "       imagename='phase_cal_robust',\n",
+    "       field='3',\n",
+    "       spw='',\n",
+    "       specmode='mfs',\n",
+    "       gridder='standard',\n",
+    "       deconvolver='hogbom',\n",
+    "       imsize=[250,250],\n",
+    "       cell=['0.1arcsec'],\n",
+    "       weighting='briggs',\n",
+    "       robust=-1.0,\n",
+    "       threshold='0mJy',\n",
+    "       niter=5000,\n",
+    "       interactive=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "aa5446a6",
+   "metadata": {},
+   "source": [
+    "Now is a good time to experiment a bit with tclean - try imaging the\n",
+    "other calibrators (fields 0 and 2; check the 'ScanIntent' again in the \n",
+    "output) and making the image size and cell size larger and smaller.\n",
+    "\n",
+    "For example, let's look at the marginally-resolved primary (flux)\n",
+    "calibrator, Ceres (field 2; 'ScanIntent' =\n",
+    "'CALIBRATE\\_AMPLI\\#ON\\_SOURCE'):"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d3a62940",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf amp_cal_robust.*')\n",
+    "\n",
+    "tclean(vis='twhya_calibrated.ms',\n",
+    "       imagename='amp_cal_robust',\n",
+    "       field='2',\n",
+    "       spw='',\n",
+    "       specmode='mfs',\n",
+    "       gridder='standard',\n",
+    "       deconvolver='hogbom',\n",
+    "       imsize=[250,250],\n",
+    "       cell=['0.1arcsec'],\n",
+    "       weighting='briggs',\n",
+    "       threshold='0mJy',\n",
+    "       niter=5000,\n",
+    "       interactive=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "67e1cb95",
+   "metadata": {},
+   "source": [
+    "Look at the image in CARTA. Notice that Ceres is somewhat resolved, as\n",
+    "we saw from the  plots above.\n",
+    "\n",
+    "If you try a really big pixel size you will see things break. It is\n",
+    "recommended to have the pixel size small compared to the synthesized\n",
+    "beam for tclean purposes (tclean quantizes the deconvolution in units of\n",
+    "pixels). When the pixel size is big compared to the synthesized beam the\n",
+    "imaging in general will degrade, even independent of how you tclean.\n",
+    "\n",
+    "<figure>\n",
+    "    <img src=\"images/Imaging-tutorial-amp-cal-big-pix_6.5.4.jpg\" width=\"500\" />\n",
+    "    <figcaption>Figure 5: CARTA image of the amplitude calibrator after tclean with a large pixel size.</figcaption>\n",
+    "</figure>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "45991e8b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf amp_cal_bigpix.*')\n",
+    "\n",
+    "tclean(vis='twhya_calibrated.ms',\n",
+    "       imagename='amp_cal_bigpix',\n",
+    "       field='2',\n",
+    "       spw='',\n",
+    "       specmode='mfs', \n",
+    "       gridder='standard',\n",
+    "       deconvolver='hogbom',\n",
+    "       imsize=[50,50],\n",
+    "       cell=['0.5arcsec'],\n",
+    "       weighting='briggs',\n",
+    "       threshold='0mJy',\n",
+    "       niter=5000,\n",
+    "       interactive=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "65f6b907",
+   "metadata": {},
+   "source": [
+    "To see the issues clearly here, compare the beam in this image to the\n",
+    "one in the first image we made (with 5x smaller pixels).\n",
+    "\n",
+    "## ASIDE: See the effects of calibration and flagging\n",
+    "\n",
+    "This section gives an aside intended to demonstrate the effect of\n",
+    "calibration. If you are focused on learning only imaging, feel free to\n",
+    "skip this section.\n",
+    "\n",
+    "The data that we are imaging went through a careful and detailed\n",
+    "calibration process. What effect did this actually have? Let's image the\n",
+    "phase calibrator with and without calibration and with and without\n",
+    "flagging just to get an idea of how our processing changed the final\n",
+    "image.\n",
+    "\n",
+    "First you need to copy the uncalibrated data from the working directory.\n",
+    "This step will differ depending on where you are storing the data. The\n",
+    "net result we want is to have a copy of the uncalibrated data in the\n",
+    "current working directory.\n",
+    "\n",
+    "If you downloaded the full data package, copy the uncalibrated data to\n",
+    "your current working directory."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "85e73784",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('tar -xvf ../working/twhya_uncalibrated.ms.tar')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d09f4f33",
+   "metadata": {},
+   "source": [
+    "If you downloaded only the calibrated data set, you can use \"wget\" again\n",
+    "to download the uncalibrated data at this time:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "01cdc539",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%%bash\n",
+    "# In bash\n",
+    " % wget -r -np -nH --cut-dirs=4 --reject \"index.html*\" https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_uncalibrated.ms.tar"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c2dfaefe",
+   "metadata": {},
+   "source": [
+    "Or you can download the file via your browser at the following links:\n",
+    "<https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_uncalibrated.ms.tar>\n",
+    "\n",
+    "Now let's TCLEAN the uncalibrated data, again focusing on the phase\n",
+    "calibrator (field 3) and using the same calls as before.\n",
+    "\n",
+    "<figure>\n",
+    "    <img src=\"images/Imaging-tutorial-phase-cal-uncalibrated_6.5.4.jpg\" width=\"500\" />\n",
+    "    <figcaption>Figure 6: The phase calibrator without any calibration.</figcaption>\n",
+    "</figure>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "62bdd5a7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf phase_cal_uncalibrated.*')\n",
+    "tclean(vis='twhya_uncalibrated.ms',\n",
+    "       imagename='phase_cal_uncalibrated',\n",
+    "       field='3',\n",
+    "       spw='',\n",
+    "       specmode='mfs',\n",
+    "       gridder='standard',\n",
+    "       deconvolver='hogbom',\n",
+    "       imsize=[250,250],\n",
+    "       cell=['0.1arcsec'],\n",
+    "       weighting='briggs',\n",
+    "       threshold='0mJy',\n",
+    "       niter=5000,\n",
+    "       interactive=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b583f859",
+   "metadata": {},
+   "source": [
+    "If you can find a source to tclean then more power to you, but this is a\n",
+    "mess. It's a good thing that we calibrated... In the raw (but still Tsys\n",
+    "and WVR corrected) data you can see echos of the calibrator throughout\n",
+    "the field, but the calibration is required to make the image coherent.\n",
+    "Inspect the imaged uncalibrated data using CARTA.\n",
+    "\n",
+    "Now let's see the effect that flagging had on the data. Copy the\n",
+    "unflagged (but otherwise calibrated) data from the working directory to\n",
+    "our local directory:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "696495b8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('tar -xvf ../working/twhya_calibrated_unflagged.ms.tar')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "be42feee",
+   "metadata": {},
+   "source": [
+    "or again, using wget:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bbaf3a54",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%%bash\n",
+    "# In bash\n",
+    " % wget -r -np -nH --cut-dirs=4 --reject \"index.html*\" https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_calibrated_unflagged.ms.tar"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "115196f1",
+   "metadata": {},
+   "source": [
+    "Or you can download the file via your browser at the following links:\n",
+    "<https://bulk.cv.nrao.edu/almadata/public/ALMA_firstlooks/twhya_calibrated_unflagged.ms.tar>\n",
+    "\n",
+    "Now image the calibrated but unflagged data for the secondary calibrator\n",
+    "using the same parameters as before.\n",
+    "\n",
+    "<figure>\n",
+    "    <img src=\"images/Imaging-tutorial-phase-cal-unflagged_6.5.4.jpg\" width=\"500\" />\n",
+    "    <figcaption>Figure 7: CARTA image of the phase calibrator without any flagging of bad data.</figcaption>\n",
+    "</figure>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dea16419",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf phase_cal_unflagged.*')\n",
+    "\n",
+    "tclean(vis='twhya_calibrated_unflagged.ms',\n",
+    "       imagename='phase_cal_unflagged',\n",
+    "       field='3',\n",
+    "       spw='',\n",
+    "       specmode='mfs',\n",
+    "       gridder='standard',\n",
+    "       deconvolver='hogbom',\n",
+    "       imsize=[250,250],\n",
+    "       cell=['0.1arcsec'],\n",
+    "       weighting='briggs',\n",
+    "       threshold='0mJy',\n",
+    "       niter=5000,\n",
+    "       interactive=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "563537e3",
+   "metadata": {},
+   "source": [
+    "In contrast to the uncalibrated data, the unflagged data are coherent,\n",
+    "but they have clear artifacts in the residuals. Flagging has definitely\n",
+    "improved the quality of the data, but in overall good quality data like\n",
+    "we have here, we can see the target source.\n",
+    "\n",
+    "## Image the science target\n",
+    "\n",
+    "Of course, the whole point of calibration is to calibrate the *science*\n",
+    "data. Here, the TW Hydra observations use field 5, which we know from\n",
+    "the output of , above. As the final step in the basic imaging tutorial,\n",
+    "let's now image the continuum in TW Hydra. First, we will \"split out\"\n",
+    "the science data into its own data set using the CASA task . While not\n",
+    "strictly necessary, this is a common step that makes managing the data\n",
+    "easier. At the same time we will smooth (i.e. average) the data in\n",
+    "frequency using width=8 to do the averaging. This reduces the data\n",
+    "volume without losing much information, since we are really only\n",
+    "interested in continuum imaging at this point. Although this data set\n",
+    "was already designed to be manageable, this smoothing trick is good to\n",
+    "keep in mind because ALMA can produce very large data sets."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ed66d364",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf twhya_smoothed.ms')\n",
+    "\n",
+    "split(vis='twhya_calibrated.ms', field='5', width='8', outputvis='twhya_smoothed.ms', datacolumn='data')\n",
+    "\n",
+    "listobs('twhya_smoothed.ms')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3fc87f0c",
+   "metadata": {},
+   "source": [
+    "Now make a continuum image of the split-out data. Notice that TW Hydra\n",
+    "has now been re-labeled as field 0 in the new data set because we split\n",
+    "out only that field. We'll use the same tclean settings as for the phase\n",
+    "calibrator, since we have covered the full primary beam with our image\n",
+    "size and cell size combination. Again, specify interactive mode and\n",
+    "leave the threshold unset for the time being.\n",
+    "\n",
+    "<figure>\n",
+    "    <img src=\"images/Imaging-tutorial-twhydra-cont_6.5.4.jpg\" width=\"500\" />\n",
+    "    <figcaption>Figure 8: Continuum image for TW Hydra.</figcaption>\n",
+    "</figure>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b2696489",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf twhya_cont.*')\n",
+    "\n",
+    "tclean(vis='twhya_smoothed.ms',\n",
+    "       imagename='twhya_cont',\n",
+    "       field='0',\n",
+    "       spw='',\n",
+    "       specmode='mfs',\n",
+    "       gridder='standard',\n",
+    "       deconvolver='hogbom',\n",
+    "       imsize=[250,250],\n",
+    "       cell=['0.1arcsec'],\n",
+    "       weighting='briggs',\n",
+    "       robust=0.5,\n",
+    "       threshold='0mJy',\n",
+    "       niter=5000,\n",
+    "       interactive=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "046de421",
+   "metadata": {},
+   "source": [
+    "Draw a clean mask around the visible emission using the mask tools and\n",
+    "then run tclean until the emission from the TW Hydra disk is less than\n",
+    "or comparable to the residuals around it. In this interactive mode of\n",
+    "cleaning, you decide when tclean should stop, and at that point you hit\n",
+    "the red X. If instead you did want to clean automatically down to a\n",
+    "threshold, you can specify a threshold that is a small multiple of the\n",
+    "rms noise either in the call to tclean above or by typing it in to the\n",
+    "tclean GUI if you started the session interactively.\n",
+    "\n",
+    "Have a look at the image - TW Hydra is very bright and you can see that\n",
+    "it is extended relative to the size of the beam, which is represented by\n",
+    "an oval, with major and minor axes marked, in the very bottom left\n",
+    "corner of the CARTA image window. The residuals aren't perfect, but we\n",
+    "will improve them in subsequent lessons.\n",
+    "\n",
+    "But wait\\! you might be asking. Didn't you say that there are spectral\n",
+    "lines in this spectral window? Yes, the spectral window that we have\n",
+    "imaged here as continuum also contains a N2H+ emission line. In this\n",
+    "case, the N2H+ emission is faint enough that neglecting to flag the line\n",
+    "channels before imaging makes no difference to the final continuum\n",
+    "image. For this and the other continuum first look tutorials, we have\n",
+    "thus ignored the line to focus on the basic steps of imaging and\n",
+    "self-calibration. In general, however, you should flag channels\n",
+    "containing emission lines in your own data prior to imaging the\n",
+    "continuum. To see how to flag line emission prior to imaging the\n",
+    "continuum in a spectral window, please see the more advanced tutorial at\n",
+    "[IRAS16293\\_Band9\\_-\\_Imaging](IRAS16293_Band9_-_Imaging \"wikilink\").\n",
+    "\n",
+    "## Non-interactive clean\n",
+    "\n",
+    "So far we have mostly followed an interactive process with tclean.\n",
+    "tclean can also be set up to run without interactive guidance. The three\n",
+    "main parameters to specify are the threshold at which to stop (when the\n",
+    "maximum residual in the tclean region is lower than this threshold,\n",
+    "tclean stops), the mask (the region in which tclean is willing to\n",
+    "identify signal), and the maximum number of iterations. The max\n",
+    "iterations is not strictly required and it is generally recommended that\n",
+    "it be used as more of a failsafe. That is, set it to a number so high\n",
+    "that if tclean gets there something has gone wrong.\n",
+    "\n",
+    "First let's take a stab at determining a clean mask. Look at the image\n",
+    "you just made. All of the obvious emission is contained in a box that is\n",
+    "bounded by pixel numbers in a range of something like (100,100) to\n",
+    "(150,150). We'll set that box to be a mask using the \"mask\" parameter in\n",
+    "the call to tclean. You could also set it by supplying a file (for\n",
+    "example the one created from your earlier interactive version of\n",
+    "tclean).\n",
+    "\n",
+    "Now let's determine a stopping threshold for tclean. Again, look at the\n",
+    "previous image using CARTA and draw a box well away from the source to\n",
+    "estimate the noise. Like before, look at the 'Statistics' tab in the\n",
+    "'Regions' box of the interface to find the RMS noise. We see something\n",
+    "like \\~7 mJy/beam. Set the threshold to be about twice this, \\~15\n",
+    "mJy/beam. A clean threshold several times the rms noise is usually\n",
+    "recommended to avoid adding false sources to the deconvolved image. That\n",
+    "is, you do not want tclean to treat a random noise spike as a source and\n",
+    "deconvolve it from the image. This can be particularly problematic if\n",
+    "you are doing self-calibration (a later lesson). Finally set\n",
+    "niter=10000, which is a lot of iterations. We expect tclean to terminate\n",
+    "before reaching this. For our purposes this is just a big number that's\n",
+    "designed to keep tclean from running forever."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0382f65f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf twhya_cont_auto.*')\n",
+    "\n",
+    "tclean(vis='twhya_smoothed.ms',\n",
+    "       imagename='twhya_cont_auto',\n",
+    "       field='0',\n",
+    "       spw='',\n",
+    "       specmode='mfs',\n",
+    "       gridder='standard',\n",
+    "       deconvolver='hogbom',\n",
+    "       imsize=[250,250],\n",
+    "       cell=['0.1arcsec'],\n",
+    "       mask='box [ [100pix , 100pix] , [150pix, 150pix] ]',\n",
+    "       weighting='briggs',\n",
+    "       robust=0.5,\n",
+    "       threshold='15mJy',\n",
+    "       niter=10000,\n",
+    "       interactive=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "786bb85c",
+   "metadata": {},
+   "source": [
+    "Look ma, no hands\\!\n",
+    "\n",
+    "This noninteractive mode can save you a lot of time and has the\n",
+    "advantage of being very reproducible. Note that you also have a \"hybrid\"\n",
+    "mode available by starting the tclean process with interactive=True, but\n",
+    "then click the blue arrow button in the top right corner. This tells\n",
+    "tclean to proceed until it hits the maximum number of iterations or the\n",
+    "threshold. This combination mode is nice because you can manually draw\n",
+    "the mask used to tclean. Note that you can also manually set both the\n",
+    "threshold and the maximum number of iterations (which is the product of\n",
+    "the number of major cycles and the iterations per cycle) in the viewer\n",
+    "GUI. Note, however, that best practice for an image with uncertain\n",
+    "calibration and especially one with a bright source, is to clean\n",
+    "interactively at least the first time. In the case where an image may be\n",
+    "\"dynamic range limited\" (i.e., the quality is set by the accuracy of\n",
+    "calibration and deconvolution) it can be hard to predict the correct\n",
+    "threshold.\n",
+    "\n",
+    "As the cleaning cycles proceed, the residuals in the image should\n",
+    "decrease. You can check this in the tclean output in the logger; if the\n",
+    "residuals start to increase you may need to change your stopping\n",
+    "threshold.\n",
+    "\n",
+    "## Primary beam correction\n",
+    "\n",
+    "An important subtlety of  is that by default the image produced by\n",
+    "tclean is not corrected for the primary beam (the field of view) of the\n",
+    "individual dishes in the array. The primary beam response is typically a\n",
+    "Gaussian with value 1 at the center of the field. To form an\n",
+    "astronomically correct image of the sky, the output of tclean needs to\n",
+    "be divided by this primary beam (or, in the case of mosaics, the\n",
+    "combination of primary beam patterns used to make the mosaic). For\n",
+    "tclean, there are two ways to do this.\n",
+    "\n",
+    "First, you can set the parameter pbcor = True when running tclean. This\n",
+    "will produce an additional image with the extension .image.pbcor, which\n",
+    "is the cleaned image corrected for the primary beam.\n",
+    "\n",
+    "Second, CASA stores the primary beam information needed to make this\n",
+    "correction in the file with the .pb extension. The CASA task impbcor can\n",
+    "be used to combine the .pb image with the output image from TCLEAN to\n",
+    "produce a primary-beam corrected image.\n",
+    "\n",
+    "First remove the old primary beam corrected image if it exists"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f3ee3cf6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "os.system('rm -rf twhya_cont.pbcor.image')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "07196024",
+   "metadata": {},
+   "source": [
+    "Now correct the image with , and then inspect the output image in CARTA:\n",
+    "\n",
+    "<figure>\n",
+    "    <img src=\"images/Imaging-tutorial-pb-correct_6.5.4.jpg\" width=\"500\" />\n",
+    "    <figcaption>Figure 9: Continuum image for TW Hydra, corrected for the primary beam.</figcaption>\n",
+    "</figure>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0b028f0a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In CASA\n",
+    "impbcor(imagename='twhya_cont.image',\n",
+    "        pbimage='twhya_cont.pb',\n",
+    "        outfile='twhya_cont.pbcor.image')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "20496184",
+   "metadata": {},
+   "source": [
+    "It's often very convenient to work in images before primary beam\n",
+    "correction because the noise is the same across the field (e.g., this is\n",
+    "a clean data set to search for signal) but it's very important to\n",
+    "remember to apply this correction before calculating fluxes or\n",
+    "intensities for science.\n",
+    "\n",
+    "The imaging of the continuum for this data continues in [First Look at\n",
+    "Self Calibration](First_Look_at_Self_Calibration \"wikilink\")."
+   ]
+  }
+ ],
+ "metadata": {
+  "jupytext": {
+   "cell_metadata_filter": "-all",
+   "main_language": "python",
+   "notebook_metadata_filter": "-all"
+  },
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.17"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
